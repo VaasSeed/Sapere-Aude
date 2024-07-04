@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import models.UserBean;
 import models.UserDao;
@@ -58,11 +59,15 @@ public class AccessoServlet extends HttpServlet {
 		try {
 			UserBean user = dao.doRetrieveLog(username, hashPassword);
 			if(user.isValid() && user.isAmministratore()) {
-				request.getSession().setAttribute("isAdmin", Boolean.TRUE);
+				HttpSession s = request.getSession();
+				s.setAttribute("isAdmin", Boolean.TRUE);
+				s.setAttribute("logged", Boolean.TRUE);
 				response.sendRedirect("common/Home.jsp");
 			}
 			else if(user.isValid()) {
-				request.getSession().setAttribute("isAdmin", Boolean.FALSE);
+				HttpSession s = request.getSession();
+				s.setAttribute("isAdmin", Boolean.FALSE);
+				s.setAttribute("logged", Boolean.TRUE);
 				response.sendRedirect("common/Home.jsp");
 			}
 			else {

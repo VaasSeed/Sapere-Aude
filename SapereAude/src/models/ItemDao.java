@@ -49,7 +49,7 @@ public class ItemDao implements ItemDaoInterface {
 			preparedStatement.setString(2, item.getNome());
 			preparedStatement.setString(3, item.getCasaEditrice());
 			preparedStatement.setDouble(4, item.getMediaVoti());
-			preparedStatement.setInt(5, item.getIdAutore());
+			preparedStatement.setString(5, item.getAutore());
 			preparedStatement.setString(6, item.getCategoria());
 		
 			preparedStatement.executeUpdate();
@@ -95,7 +95,7 @@ public class ItemDao implements ItemDaoInterface {
 					item.setNome(rs.getString("nome"));
 					item.setCasaEditrice(rs.getString("casaEditrice"));
 					item.setMediaVoti(rs.getDouble("mediaVoti"));
-					item.setIdAutore(rs.getInt("autore"));
+					item.setAutore(rs.getString("autore"));
 					item.setCategoria(rs.getString("categoria"));
 				}
 			}
@@ -143,7 +143,7 @@ public class ItemDao implements ItemDaoInterface {
 				item.setNome(rs.getString("nome"));
 				item.setCasaEditrice(rs.getString("casaEditrice"));
 				item.setMediaVoti(rs.getDouble("mediaVoti"));
-				item.setIdAutore(rs.getInt("autore"));
+				item.setAutore(rs.getString("autore"));
 				item.setCategoria(rs.getString("categoria"));
 				items.add(item);
 			}

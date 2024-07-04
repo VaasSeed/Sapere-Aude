@@ -43,12 +43,12 @@ public class ItemBean implements Serializable {
 		this.mediaVoti = mediaVoti;
 	}
 	
-	public int getIdAutore() {
-		return idAutore;
+	public String getAutore() {
+		return Autore;
 	}
 	
-	public void setIdAutore(int idAutore) {
-		this.idAutore = idAutore;
+	public void setAutore(String Autore) {
+		this.Autore = Autore;
 	}
 	
 	public String getCategoria() {
@@ -63,6 +63,6 @@ public class ItemBean implements Serializable {
 	private String nome;
 	private String casaEditrice;
 	private double mediaVoti;
-	private int idAutore;
+	private String Autore;
 	private String categoria;
 } 

@@ -13,7 +13,7 @@
   <body onload = "itemsFunction()">
   	
   	<div>
-  		<%@include file="../frangments/header.jsp"%>
+  		<%@include file="../fragments/header.jsp"%>
   	</div>
   	<div id="tableContainer">
 	<div id="tableRow">

@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div>
-		<%@include file="./frangments/header.jsp"%>
+		<%@include file="./fragments/header.jsp"%>
 	</div>
 	<br>
 	<h1></h1>

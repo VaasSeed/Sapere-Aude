@@ -45,18 +45,17 @@ public class ItemsServlet extends HttpServlet {
 				String casaEditrice = item.getCasaEditrice();
 				String categoria = item.getCategoria();
 				double mediaVoti = item.getMediaVoti();
-				int idAutore = item.getIdAutore();    
+				String Autore = item.getAutore();    
 				json.put("ISBN", ISBN);
 				json.put("Nome", nome);
 				json.put("CasaEditrice", casaEditrice);
 				json.put("Categoria", categoria);
 				json.put("MediaVoti", mediaVoti);
-				json.put("Autore", idAutore);
+				json.put("Autore", Autore);
 				jArray.add(json);
 			}
 				
 				out.print(jArray.toString());
-				//out.flush();
 			
 		}catch(SQLException e) {
 			System.out.println("Error:" + e.getMessage());
