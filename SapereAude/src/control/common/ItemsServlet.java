@@ -46,6 +46,7 @@ public class ItemsServlet extends HttpServlet {
 				String categoria = item.getCategoria();
 				double mediaVoti = item.getMediaVoti();
 				String Autore = item.getAutore();    
+				
 				json.put("ISBN", ISBN);
 				json.put("Nome", nome);
 				json.put("CasaEditrice", casaEditrice);
@@ -54,8 +55,8 @@ public class ItemsServlet extends HttpServlet {
 				json.put("Autore", Autore);
 				jArray.add(json);
 			}
-				
 				out.print(jArray.toString());
+
 			
 		}catch(SQLException e) {
 			System.out.println("Error:" + e.getMessage());

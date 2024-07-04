@@ -148,21 +148,16 @@ public class ItemDao implements ItemDaoInterface {
 				items.add(item);
 			}
 		}
-		catch (Exception ex) 
-		{
-			System.out.println("SELECT operation for ALL failed: An Exception has occurred! " + ex); 
-		}
-		finally {
-			try {
-				if (preparedStatement != null)
-					preparedStatement.close();
-			} 
-			finally {
-				if (connection != null)
-					connection.close();
-			}
-		}
-		
+		 finally {
+				try {
+					if (preparedStatement != null)
+						preparedStatement.close();
+				} 
+				finally {
+					if (connection != null)
+						connection.close();
+				}
+		 }
 		return items;
 	}
 }

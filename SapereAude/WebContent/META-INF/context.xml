@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
-	<Resource name="jdbc/libreria"
+	<Resource 
+		name="jdbc/libreria"
 		auth="Container"
 		driverClassName="com.mysql.cj.jdbc.Driver"
 		type="javax.sql.DataSource"
@@ -11,5 +12,4 @@
 					 useLegacyDatetimeCode=false&amp;autoReconnect=true&amp;
 					 serverTimezone=UTC&amp;useSSL=false&amp; 
 					 allowPublicKeyRetrieval=true" />
-
 </Context>
