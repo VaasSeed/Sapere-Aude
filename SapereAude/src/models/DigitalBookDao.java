@@ -1,7 +1,5 @@
 package models;
 
-import java.io.InputStream;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +11,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-public class ItemDao implements ItemDaoInterface {
+public class DigitalBookDao implements DigitalBookDaoInterface {
 
 	private static DataSource ds;
 
@@ -31,37 +29,34 @@ public class ItemDao implements ItemDaoInterface {
 	}
 	
 	
-	private static final String TABLE_NAMEO = "opera";
+	private static final String TABLE_NAME = "operadigitale";
 	
 	
 	@Override
-	public synchronized void doSave(ItemBean item) throws SQLException {
+	public synchronized void doSave(DigitalBookBean digitalBook) throws SQLException {
 		
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		String insertSQL = "INSERT INTO " + ItemDao.TABLE_NAMEO
-						+ " (ISBN, nome, casaEditrice, autore, categoria, photo) VALUES (?, ?, ?, ?, ?, ?) ";
+		String insertSQL = "INSERT INTO " + DigitalBookDao.TABLE_NAME
+						+ " (ISBNOpera, numeroPagine, linguaTesto, costoAcquisto, costoNoleggio) VALUES (?, ?, ?, ?, ?) ";
 		
 		try {
 			connection = ds.getConnection();
 			connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(insertSQL);
-			preparedStatement.setString(1, item.getISBN());
-			preparedStatement.setString(2, item.getNome());
-			preparedStatement.setString(3, item.getCasaEditrice());
-			preparedStatement.setString(4, item.getAutore());
-			preparedStatement.setString(5, item.getCategoria());
 			
-			InputStream foto = item.getFoto();
-				if(foto != null) {
-				preparedStatement.setBlob(6, foto);
-			}
-			
+			preparedStatement.setString(1, digitalBook.getISBNOpera());
+			preparedStatement.setInt(2, digitalBook.getNumPagine());
+			preparedStatement.setString(3, digitalBook.getLingua());
+			preparedStatement.setDouble(4, digitalBook.getCostoAcquisto());
+			preparedStatement.setDouble(5, digitalBook.getCostoNoleggio());
+		
 			preparedStatement.executeUpdate();
+
 			connection.commit();
 		}
-		catch (Exception ex) 
+		catch (SQLException ex) 
 		{
 			System.out.println("INSERT operation failed: An Exception has occurred! " + ex); 
 		}
@@ -79,22 +74,22 @@ public class ItemDao implements ItemDaoInterface {
 
 
 	@Override
-	public synchronized ItemBean doRetrieve(String ISBN) throws SQLException {
+	public synchronized DigitalBookBean doRetrieve(String ISBNOpera) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		
-		ItemBean item = new ItemBean();
+		DigitalBookBean digitalBook = new DigitalBookBean();
 		
-		String searchQuery = "select * from " + ItemDao.TABLE_NAMEO
-							+ "	where ISBN = ?";
+		String searchQuery = "select * from " + DigitalBookDao.TABLE_NAME
+							+ "	where ISBNOpera = ?";
 		
 		try
 			{
 			//connect to DB 
 			connection = ds.getConnection();
 			preparedStatement = connection.prepareStatement(searchQuery);
-			preparedStatement.setString(1, ISBN);
 			
+			preparedStatement.setString(1, ISBNOpera);
 			ResultSet rs = preparedStatement.executeQuery();
 			
 			boolean more = rs.next();
@@ -102,17 +97,14 @@ public class ItemDao implements ItemDaoInterface {
 					return null;
 				else if (more) 
 				{
-					item.setISBN(rs.getString("ISBN"));
-					item.setNome(rs.getString("nome"));
-					item.setCasaEditrice(rs.getString("casaEditrice"));
-					item.setMediaVoti(rs.getDouble("mediaVoti"));
-					item.setAutore(rs.getString("autore"));
-					item.setCategoria(rs.getString("categoria"));
-					Blob blob = rs.getBlob("photo");
-					item.setFoto(blob.getBinaryStream());
+					digitalBook.setISBNOpera(rs.getString("ISBNOpera"));
+					digitalBook.setNumPagine(rs.getInt("numeroPagine"));
+					digitalBook.setLingua(rs.getString("linguaTesto"));
+					digitalBook.setCostoAcquisto(rs.getDouble("costoAcquisto"));
+					digitalBook.setCostoNoleggio(rs.getDouble("costoNoleggio"));
 				}
 			}
-			catch (Exception ex) 
+			catch (SQLException ex) 
 			{
 				System.out.println("SELECT operation failed: An Exception has occurred! " + ex); 
 			}
@@ -127,18 +119,18 @@ public class ItemDao implements ItemDaoInterface {
 			}
 	 }
 
-		return item;
+		return digitalBook;
 	}
 	
 	@Override
-	public synchronized ArrayList<ItemBean> doRetrieveAll(String order) throws SQLException {
+	public synchronized ArrayList<DigitalBookBean> doRetrieveAll(String order) throws SQLException {
 	
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		ArrayList<ItemBean> items = new ArrayList<ItemBean>();
+		ArrayList<DigitalBookBean> digitalBooks = new ArrayList<DigitalBookBean>();
 
-		String selectSQL = "SELECT * FROM " + ItemDao.TABLE_NAMEO;
+		String selectSQL = "SELECT * FROM " + DigitalBookDao.TABLE_NAME;
 
 		if (order != null && !order.equals("")) {
 			selectSQL += " ORDER BY " + order;
@@ -151,19 +143,16 @@ public class ItemDao implements ItemDaoInterface {
 			ResultSet rs = preparedStatement.executeQuery();
 			
 			while (rs.next()) {
-				ItemBean item = new ItemBean();
-				item.setISBN(rs.getString("ISBN"));
-				item.setNome(rs.getString("nome"));
-				item.setCasaEditrice(rs.getString("casaEditrice"));
-				item.setMediaVoti(rs.getDouble("mediaVoti"));
-				item.setAutore(rs.getString("autore"));
-				item.setCategoria(rs.getString("categoria"));
-				Blob blob = rs.getBlob("photo");
-				item.setFoto(blob.getBinaryStream());
-				items.add(item);
+				DigitalBookBean digitalBook = new DigitalBookBean();
+				digitalBook.setISBNOpera(rs.getString("ISBNOpera"));
+				digitalBook.setNumPagine(rs.getInt("numeroPagine"));
+				digitalBook.setLingua(rs.getString("linguaTesto"));
+				digitalBook.setCostoAcquisto(rs.getDouble("costoAcquisto"));
+				digitalBook.setCostoNoleggio(rs.getDouble("costoNoleggio"));
+				digitalBooks.add(digitalBook);
 			}
 		}
-		catch (Exception ex) 
+		catch (SQLException ex) 
 		{
 			System.out.println("SELECT ALL operation failed: An Exception has occurred! " + ex); 
 		}
@@ -177,6 +166,6 @@ public class ItemDao implements ItemDaoInterface {
 						connection.close();
 				}
 		 }
-		return items;
+		return digitalBooks;
 	}
 }

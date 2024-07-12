@@ -21,7 +21,7 @@ div#header {
 	margin: 0px;
 }
 
-input.btn {
+.btn {
 	margin-top: 30px;
 	margin-right: 60px;
 	padding-top: 0px;
@@ -45,6 +45,26 @@ input.btn {
 	vertical-align : top;
 }
 
+ul{
+	border-radius : 10px;
+}
+
+.navelement{
+	display: block;
+	padding: 0px;
+	background-color: #ADD8E6;
+	color: rgb(0, 0, 70);
+	transition-duration: 0.7s;
+	text-align: center;
+	width: 90%;
+}
+
+.navelement:hover{
+	background-color: lightsteelblue;
+	color : rgb(0, 0, 70);
+	cursor : pointer;
+	transform : translatex(20px);
+}
 
 .list{
 	display: inline-block;
@@ -53,8 +73,13 @@ input.btn {
 	font-family : sans-serif;
 	background-color : #ADD8E6;
 	border-radius: 10px;
+	border-width : 0px;
 	color : rgb(0, 0, 70);
 	text-align : center;
+}
+
+.list:hover{
+  scale: 1.15;
 }
 
 #filters{
@@ -66,4 +91,71 @@ input.btn {
 	background-color : #ADD8E6;
 	text-align : center;
 	color : rgb(0, 0, 70);
+}
+
+.filter{
+	border-width: 0px;
+	background-color : #ADD8E6;
+	color : rgb(0, 0, 70);
+}
+
+.bookImage{
+	padding : 10px 10px 20px 10px;
+	margin : 10px 10px 10px 10px; 
+}
+
+#page{
+	border : none;
+	height : 100%;
+	width : 100%;
+}
+
+#fil{
+	border-radius : 10px;
+	height : 100%;
+	width : 30%;
+	float : left;
+}
+
+#funcPage{
+	padding : 10px;
+	margin : 10px;
+	height : 500px;
+	width : 60%;
+	float : right;
+}
+
+.l {
+  list-style-type: none;
+  margin: 10px;
+  padding: 10px;
+  overflow: hidden;
+  background-color: #F0FFFF;
+}
+
+.i {
+  float: left;
+}
+
+.switch{
+	border-radius: 10px;
+	border-width: 2px;
+	color : rgb(0, 0, 70);
+	background-color: #AFEEEE;
+	font-family: italic, verdana;
+}
+
+.i .switch {
+  display: block;
+  color: rgb(0, 0, 70);
+  text-align: center;
+  padding: 16px;
+  margin: 6px;
+  border-width: 1px;
+  text-decoration: none;
+  border-color: #00DEC1;
+}
+
+.i .switch:hover {
+  scale: 1.15;
 }

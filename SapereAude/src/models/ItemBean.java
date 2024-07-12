@@ -1,5 +1,6 @@
 package models;
 
+import java.io.InputStream;
 import java.io.Serializable;
 
 public class ItemBean implements Serializable {
@@ -9,7 +10,6 @@ public class ItemBean implements Serializable {
 	public ItemBean() {
 		
 	}
-	
 	
 	public String getISBN() {
 		return isbn;
@@ -59,10 +59,19 @@ public class ItemBean implements Serializable {
 		this.categoria = categoria;
 	}
 	
+	public InputStream getFoto() {
+		return foto;
+	}
+	
+	public void setFoto(InputStream foto) {
+		this.foto = foto;
+	}
+	
 	private String isbn;
 	private String nome;
 	private String casaEditrice;
 	private double mediaVoti;
 	private String Autore;
 	private String categoria;
+	private InputStream foto;
 } 

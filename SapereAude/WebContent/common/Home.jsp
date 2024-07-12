@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
 <html>
@@ -17,20 +17,17 @@
   	</div>
   	<div id="tableContainer">
 	<div id="tableRow">
-  	<section id="filters">
-  		<input type = "checkbox" id = "Avventura" value = "Avventura"/>
-  		<label for = "Avventura">Avventura</label><br>
-   		<input type = "checkbox" id = "Horror" value = "Horror"/>
-  		<label for = "Horror">Horror</label><br>
-  		<input type = "checkbox" id = "Fantasy" value = "Fantasy"/>
-  		<label for = "Fantasy">Fantasy</label><br>
-  		<input type = "checkbox" id = "Giallo" value = "Giallo"/>
-  		<label for = "Giallo">Giallo</label><br>
-  	</section>
+	  	<section id="filters">
+	  		<ul>
+				<li class = "navelement"><input type = "button" class = "filter" value= "Avventura"></li>
+				<li class = "navelement">Horror</li>
+				<li class = "navelement">Fantasy</li>
+				<li class = "navelement">Giallo</li>
+			</ul>
+	  	</section>
   	
 		<section id ="hi">
 		</section>
-	
 	</div>
 	</div>
   </body>

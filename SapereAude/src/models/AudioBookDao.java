@@ -1,7 +1,5 @@
 package models;
 
-import java.io.InputStream;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +11,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-public class ItemDao implements ItemDaoInterface {
+public class AudioBookDao implements AudioBookDaoInterface {
 
 	private static DataSource ds;
 
@@ -31,37 +29,33 @@ public class ItemDao implements ItemDaoInterface {
 	}
 	
 	
-	private static final String TABLE_NAMEO = "opera";
+	private static final String TABLE_NAME = "audiolibro";
 	
 	
 	@Override
-	public synchronized void doSave(ItemBean item) throws SQLException {
+	public synchronized void doSave(AudioBookBean audioBook) throws SQLException {
 		
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		String insertSQL = "INSERT INTO " + ItemDao.TABLE_NAMEO
-						+ " (ISBN, nome, casaEditrice, autore, categoria, photo) VALUES (?, ?, ?, ?, ?, ?) ";
+		String insertSQL = "INSERT INTO " + AudioBookDao.TABLE_NAME
+						+ " (ISBNOpera, durata, linguaAudio, costoAcquisto, costoNoleggio) VALUES (?, ?, ?, ?, ?) ";
 		
 		try {
 			connection = ds.getConnection();
 			connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(insertSQL);
-			preparedStatement.setString(1, item.getISBN());
-			preparedStatement.setString(2, item.getNome());
-			preparedStatement.setString(3, item.getCasaEditrice());
-			preparedStatement.setString(4, item.getAutore());
-			preparedStatement.setString(5, item.getCategoria());
-			
-			InputStream foto = item.getFoto();
-				if(foto != null) {
-				preparedStatement.setBlob(6, foto);
-			}
-			
+			preparedStatement.setString(1, audioBook.getISBNOpera());
+			preparedStatement.setString(2, audioBook.getDurata());
+			preparedStatement.setString(3, audioBook.getLingua());
+			preparedStatement.setDouble(4, audioBook.getCostoAcquisto());
+			preparedStatement.setDouble(5, audioBook.getCostoNoleggio());
+		
 			preparedStatement.executeUpdate();
+
 			connection.commit();
 		}
-		catch (Exception ex) 
+		catch (SQLException ex) 
 		{
 			System.out.println("INSERT operation failed: An Exception has occurred! " + ex); 
 		}
@@ -79,40 +73,35 @@ public class ItemDao implements ItemDaoInterface {
 
 
 	@Override
-	public synchronized ItemBean doRetrieve(String ISBN) throws SQLException {
+	public synchronized AudioBookBean doRetrieve(String ISBNOpera) throws SQLException {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		
-		ItemBean item = new ItemBean();
+		AudioBookBean digitalBook = new AudioBookBean();
 		
-		String searchQuery = "select * from " + ItemDao.TABLE_NAMEO
-							+ "	where ISBN = ?";
+		String searchQuery = "select * from " + AudioBookDao.TABLE_NAME
+							+ "	where ISBNOpera = ?";
 		
 		try
 			{
 			//connect to DB 
 			connection = ds.getConnection();
 			preparedStatement = connection.prepareStatement(searchQuery);
-			preparedStatement.setString(1, ISBN);
-			
+			preparedStatement.setString(1, ISBNOpera);
 			ResultSet rs = preparedStatement.executeQuery();
-			
 			boolean more = rs.next();
 				if (!more) 
 					return null;
 				else if (more) 
 				{
-					item.setISBN(rs.getString("ISBN"));
-					item.setNome(rs.getString("nome"));
-					item.setCasaEditrice(rs.getString("casaEditrice"));
-					item.setMediaVoti(rs.getDouble("mediaVoti"));
-					item.setAutore(rs.getString("autore"));
-					item.setCategoria(rs.getString("categoria"));
-					Blob blob = rs.getBlob("photo");
-					item.setFoto(blob.getBinaryStream());
+					digitalBook.setISBNOpera(rs.getString("ISBNOpera"));
+					digitalBook.setDurata(rs.getString("durata"));
+					digitalBook.setLingua(rs.getString("linguaAudio"));
+					digitalBook.setCostoAcquisto(rs.getDouble("costoAcquisto"));
+					digitalBook.setCostoNoleggio(rs.getDouble("costoNoleggio"));
 				}
 			}
-			catch (Exception ex) 
+			catch (SQLException ex) 
 			{
 				System.out.println("SELECT operation failed: An Exception has occurred! " + ex); 
 			}
@@ -127,18 +116,18 @@ public class ItemDao implements ItemDaoInterface {
 			}
 	 }
 
-		return item;
+		return digitalBook;
 	}
 	
 	@Override
-	public synchronized ArrayList<ItemBean> doRetrieveAll(String order) throws SQLException {
+	public synchronized ArrayList<AudioBookBean> doRetrieveAll(String order) throws SQLException {
 	
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		ArrayList<ItemBean> items = new ArrayList<ItemBean>();
+		ArrayList<AudioBookBean> digitalBooks = new ArrayList<AudioBookBean>();
 
-		String selectSQL = "SELECT * FROM " + ItemDao.TABLE_NAMEO;
+		String selectSQL = "SELECT * FROM " + AudioBookDao.TABLE_NAME;
 
 		if (order != null && !order.equals("")) {
 			selectSQL += " ORDER BY " + order;
@@ -151,19 +140,16 @@ public class ItemDao implements ItemDaoInterface {
 			ResultSet rs = preparedStatement.executeQuery();
 			
 			while (rs.next()) {
-				ItemBean item = new ItemBean();
-				item.setISBN(rs.getString("ISBN"));
-				item.setNome(rs.getString("nome"));
-				item.setCasaEditrice(rs.getString("casaEditrice"));
-				item.setMediaVoti(rs.getDouble("mediaVoti"));
-				item.setAutore(rs.getString("autore"));
-				item.setCategoria(rs.getString("categoria"));
-				Blob blob = rs.getBlob("photo");
-				item.setFoto(blob.getBinaryStream());
-				items.add(item);
+				AudioBookBean audioBook = new AudioBookBean();
+				audioBook.setISBNOpera(rs.getString("ISBNOpera"));
+				audioBook.setDurata(rs.getString("durata"));
+				audioBook.setLingua(rs.getString("linguaAudio"));
+				audioBook.setCostoAcquisto(rs.getDouble("costoAcquisto"));
+				audioBook.setCostoNoleggio(rs.getDouble("costoNoleggio"));
+				digitalBooks.add(audioBook);
 			}
 		}
-		catch (Exception ex) 
+		catch (SQLException ex) 
 		{
 			System.out.println("SELECT ALL operation failed: An Exception has occurred! " + ex); 
 		}
@@ -177,6 +163,6 @@ public class ItemDao implements ItemDaoInterface {
 						connection.close();
 				}
 		 }
-		return items;
+		return digitalBooks;
 	}
 }

@@ -7,7 +7,7 @@ public interface ItemDaoInterface {
 
 	public void doSave(ItemBean item) throws SQLException;
 	
-	public ItemBean doRetrieve(String opera) throws SQLException;
+	public ItemBean doRetrieve(String ISBN) throws SQLException;
 	
 	public ArrayList<ItemBean> doRetrieveAll(String order) throws SQLException;
 }

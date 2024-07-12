@@ -1,6 +1,5 @@
 function itemsFunction() {
     var url = '../ItemsServlet';
-    //loadAjaxDoc(url, handleCAP);
     loadAjaxDoc(url, "GET", printItems);
 }
 
@@ -69,21 +68,46 @@ function printItems(request){
 	for(var i = 0; i < response.length; i++){
 		var root = document.getElementById("hi");
 		
-		var div = document.createElement("span");
+		var isbn = response[i].ISBN;
+		var name = response[i].Nome;
+		var category = response[i].Categoria
+		var value = response[i].MediaVoti
+		var author = response[i].Autore
+		var ph = response[i].Foto;
+		
+		sessionStorage.setItem("ISBN", isbn);
+		sessionStorage.setItem("Name", name);
+		sessionStorage.setItem("Category", category);
+		sessionStorage.setItem("Value", value);
+		sessionStorage.setItem("Author", author);
+		
+		var div = document.createElement("button");
 		div.classList.add("list");
+		div.setAttribute("type", "button");
 		
-		div.innerHTML += response[i].ISBN + "<br>";
+		var photo = document.createElement("img");
+		div.classList.add("bookImage");
+		var src = "data:image/png;base64," + ph;
+		photo.src = src;
 		
-		div.innerHTML += response[i].Nome + "<br>";
+		sessionStorage.setItem("Foto", src);
 		
-		div.innerHTML += response[i].CasaEditrice + "<br>";
+		div.appendChild(photo);
 		
-		div.innerHTML += response[i].Categoria + "<br>";
+		div.innerHTML += "<br>" + name + "<br>";
 		
-		div.innerHTML += response[i].MediaVoti + "<br>";
+		div.innerHTML += category + "<br>";
 		
-		div.innerHTML += response[i].Autore + "<br>";
+		div.innerHTML += value + "<br>";
 		
+		div.innerHTML += author+ "<br>";
+		
+		var button = document.createElement('a');
+		button.setAttribute("href", "DigitalBook.jsp");
+		button.innerHTML = "APRI";
+	
+		div.append(button);	
 		root.append(div);
+		
 	}
 }

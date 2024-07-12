@@ -1,6 +1,8 @@
 package control.common;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.*;
@@ -40,12 +42,29 @@ public class ItemsServlet extends HttpServlet {
 			JSONArray jArray= new JSONArray();
 			for(ItemBean item : items) {
 				JSONObject json = new JSONObject();
+				
 				String ISBN = item.getISBN();
 				String nome = item.getNome();
 				String casaEditrice = item.getCasaEditrice();
 				String categoria = item.getCategoria();
 				double mediaVoti = item.getMediaVoti();
-				String Autore = item.getAutore();    
+				String Autore = item.getAutore();
+				InputStream foto = item.getFoto();
+				
+				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+				byte[] buffer = new byte[4096];
+				int bytesRead = -1;
+				
+				while ((bytesRead = foto.read(buffer)) != -1) {
+				    outputStream.write(buffer, 0, bytesRead);
+				}
+				 
+				byte[] imageBytes = outputStream.toByteArray();
+				 
+				String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+				 
+				foto.close();
+				outputStream.close();
 				
 				json.put("ISBN", ISBN);
 				json.put("Nome", nome);
@@ -53,6 +72,7 @@ public class ItemsServlet extends HttpServlet {
 				json.put("Categoria", categoria);
 				json.put("MediaVoti", mediaVoti);
 				json.put("Autore", Autore);
+				json.put("Foto", base64Image);
 				jArray.add(json);
 			}
 				out.print(jArray.toString());
@@ -74,7 +94,7 @@ public class ItemsServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+		processRequest(request, response);
 	}
 
 }
