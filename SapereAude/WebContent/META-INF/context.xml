@@ -5,8 +5,8 @@
 		auth="Container"
 		driverClassName="com.mysql.cj.jdbc.Driver"
 		type="javax.sql.DataSource"
-		username="(insert-username)"
-		password="(insert-password)"
+		username="(insert username)"
+		password="(insert password)"
 		url="jdbc:mysql://localhost:3307/libreria?useUnicode=true&amp;
 			         useJDBCCompliantTimezoneShift=true&amp;
 					 useLegacyDatetimeCode=false&amp;autoReconnect=true&amp;

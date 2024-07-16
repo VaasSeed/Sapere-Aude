@@ -13,6 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import models.BuyDigitalBookBean;
+import models.BuyDigitalBookDao;
+import models.OrderBean;
+import models.OrderDao;
+import models.OrderItem;
+import models.RentDigitalBookBean;
+import models.RentDigitalBookDao;
 import models.UserBean;
 import models.UserDao;
 /**
@@ -43,6 +50,7 @@ public class AccessoServlet extends HttpServlet {
 		
 		username = username.trim();
 		pswd = pswd.trim();
+		
 		if(username == null || username.isEmpty())
 			errors.add("Inserire lo username");
 		if(pswd == null || pswd.isEmpty())
@@ -58,17 +66,21 @@ public class AccessoServlet extends HttpServlet {
 		
 		try {
 			UserBean user = dao.doRetrieveLog(username, hashPassword);
-			if(user.isValid() && user.isAmministratore()) {
+			if(user.isValid()) {
 				HttpSession s = request.getSession();
-				s.setAttribute("isAdmin", Boolean.TRUE);
+				s.setAttribute("user", username);
 				s.setAttribute("logged", Boolean.TRUE);
-				response.sendRedirect("common/Home.jsp");
-			}
-			else if(user.isValid()) {
-				HttpSession s = request.getSession();
+				
+				restoreCart(request, username);
+				
+				if(user.isAmministratore()) {
+					s.setAttribute("isAdmin", Boolean.TRUE);
+					response.sendRedirect("common/Home.jsp");
+				}
+				else {
 				s.setAttribute("isAdmin", Boolean.FALSE);
-				s.setAttribute("logged", Boolean.TRUE);
 				response.sendRedirect("common/Home.jsp");
+				}
 			}
 			else {
 				errors.add("Username o Password errati.");
@@ -79,6 +91,58 @@ public class AccessoServlet extends HttpServlet {
 			
 		}catch(SQLException e) {
 			System.out.println("Error:" + e.getMessage());
+		}
+	}
+	
+	private void restoreCart(HttpServletRequest request, String username) throws SQLException{
+		ArrayList<OrderItem> cart = new ArrayList<OrderItem>();
+		OrderDao daoOrder = new OrderDao();
+		try {
+			
+			OrderBean order = daoOrder.doRetrieve(username, 0);
+			double costo;
+			
+			if(order != null) {
+				int idOrder = order.getIdOrdine();
+				
+				RentDigitalBookDao rentDao = new RentDigitalBookDao();
+				ArrayList<RentDigitalBookBean> rentItems= rentDao.doRetrieveAll(idOrder, null);
+				if(rentItems != null) {
+					for(RentDigitalBookBean rentItem : rentItems) {
+						OrderItem itemCart = new OrderItem();
+						itemCart.setId(rentItem.getIdNoleggio());
+						itemCart.setISBNOpera(rentItem.getISBNOpera());
+						itemCart.setNomeOpera(rentItem.getNomeOpera());
+						itemCart.setTipoOpera(rentItem.getTipoOpera());
+						itemCart.setOperazione("noleggio");
+						costo = rentItem.getCosto();
+						itemCart.setCosto(costo);
+						cart.add(itemCart);
+					}
+					request.getSession().setAttribute("Cart", cart);
+				}
+				
+				BuyDigitalBookDao buyDao = new BuyDigitalBookDao();
+				ArrayList<BuyDigitalBookBean> buyItems = buyDao.doRetrieveAll(idOrder, null);
+				if(buyItems != null) {
+					for(BuyDigitalBookBean buyItem : buyItems) {
+						OrderItem itemCart = new OrderItem();
+						itemCart.setId(buyItem.getIdAcquisto());
+						itemCart.setISBNOpera(buyItem.getISBNOpera());
+						itemCart.setNomeOpera(buyItem.getNomeOpera());
+						itemCart.setTipoOpera(buyItem.getTipoOpera());
+						itemCart.setOperazione("acquisto");
+						costo = buyItem.getCosto();
+						itemCart.setCosto(costo);
+						cart.add(itemCart);
+					}
+					request.getSession().setAttribute("Cart", cart);
+				}
+			}
+		}
+		catch (Exception ex) 
+		{
+			System.out.println("ERROR: An Exception has occurred in Restore Cart! " + ex); 
 		}
 	}
 	

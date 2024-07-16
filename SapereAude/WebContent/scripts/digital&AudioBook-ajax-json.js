@@ -82,13 +82,23 @@ function printDigitalBook(request){
 		    root.removeChild(root.firstChild);
 		}
 		
+		var head = document.getElementById("head");
+		head.style = "text-align : center";
+		head.innerHTML = "LIBRO" + "<br>" + "<br>";
+		
 		var text = document.createElement("span");
+		text.className = "center";
 		
 		var name = sessionStorage.getItem("Name");
 		var category = sessionStorage.getItem("Category");
 		var value = sessionStorage.getItem("Value");
 		var author = sessionStorage.getItem("Author");
 		var src = sessionStorage.getItem("Foto");
+		var costoAcquisto = response.CostoAcquisto;
+		var costoNoleggio = response.CostoNoleggio;
+		sessionStorage.setItem("CostoAcquisto", costoAcquisto);
+		sessionStorage.setItem("CostoNoleggio", costoNoleggio);
+		sessionStorage.setItem("Type", "libro");
 
 		var photo = document.createElement("img");
 		photo.src = src;
@@ -106,9 +116,9 @@ function printDigitalBook(request){
 		
 		text.innerHTML += "Lingua: " + response.Lingua + "<br>";
 		
-		text.innerHTML += "Prezzo acquisto: " + response.CostoAcquisto + "&#8364 <br>";
+		text.innerHTML += "Prezzo acquisto: " + costoAcquisto + "&#8364 <br>";
 		
-		text.innerHTML += "Prezzo noleggio: " + response.CostoNoleggio + "&#8364 <br>";
+		text.innerHTML += "Prezzo noleggio: " + costoNoleggio + "&#8364 <br>";
 
 		root.append(text);
 }
@@ -128,6 +138,10 @@ function printAudioBook(request){
 		    root.removeChild(root.firstChild);
 		}
 		
+		var head = document.getElementById("head");
+		head.style = "text-align : center";
+		head.innerHTML = "AUDIOLIBRO" + "<br>" + "<br>";
+		
 		var text = document.createElement("span");
 		
 		var name = sessionStorage.getItem("Name");
@@ -135,6 +149,11 @@ function printAudioBook(request){
 		var value = sessionStorage.getItem("Value");
 		var author = sessionStorage.getItem("Author");
 		var src = sessionStorage.getItem("Foto");
+		var costoAcquisto = response.CostoAcquisto;
+		var costoNoleggio = response.CostoNoleggio;
+		sessionStorage.setItem("CostoAcquisto", costoAcquisto);
+		sessionStorage.setItem("CostoNoleggio", costoNoleggio);
+		sessionStorage.setItem("Type", "audiolibro");
 
 		var photo = document.createElement("img");
 		photo.src = src;
@@ -152,9 +171,39 @@ function printAudioBook(request){
 		
 		text.innerHTML += "Lingua: " + response.Lingua + "<br>";
 		
-		text.innerHTML += "Prezzo acquisto: " + response.CostoAcquisto + "&#8364 <br>";
+		text.innerHTML += "Prezzo acquisto: " + costoAcquisto + "&#8364 <br>";
 		
-		text.innerHTML += "Prezzo noleggio: " + response.CostoNoleggio + "&#8364 <br>";
+		text.innerHTML += "Prezzo noleggio: " + costoNoleggio + "&#8364 <br>";
 		
 		root.append(text);		
+}
+
+function addToCart(x) {
+	var isbn = sessionStorage.getItem("ISBN");
+	var name = sessionStorage.getItem("Name");
+	var type = sessionStorage.getItem("Type");
+	var op = x;
+	var rPrice = sessionStorage.getItem("CostoNoleggio");
+	var pPrice = sessionStorage.getItem("CostoAcquisto");
+	
+	if(!op.localeCompare("noleggio")){
+		var price = rPrice;
+	}
+	else if(!op.localeCompare("acquisto"))
+		var price = pPrice;
+			
+	var params = "ISBN="+isbn+"&name="+name+"&type="+type+"&operation="+op+"&price="+price;
+    var url = '../AddToCart';
+    loadAjaxDoc(url, params, "POST", msg);
+}
+
+function msg(){
+	var my_popup = document.getElementById("my-popup");
+	my_popup.style.display="block";
+	setTimeout(hide_msg, 4000);
+}
+
+function hide_msg(){
+	var my_popup = document.getElementById("my-popup");
+	my_popup.style.display="none";
 }

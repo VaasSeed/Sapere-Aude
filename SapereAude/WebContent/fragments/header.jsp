@@ -21,6 +21,9 @@
   <%}
   else{%>
 	<div id = "header">
+		<a href="Cart.jsp">
+ 			<img class = "cart-btn" src="../images/cart.png">
+		</a>
 		<input class = "btn" type = "button" value= "ESCI" onclick = "logoutFunction()">
 		<% if(admin != null){%>
 		<input class = "btn" type = "button" value= "ADMIN" onclick = "adminFunction()">

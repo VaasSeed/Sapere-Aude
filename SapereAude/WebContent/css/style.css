@@ -19,6 +19,7 @@ div#header {
 	background-color: #ADD8E6;
 	border-radius: 10px;
 	margin: 0px;
+	width : 100%;
 }
 
 .btn {
@@ -158,4 +159,60 @@ ul{
 
 .i .switch:hover {
   scale: 1.15;
+}
+
+#content{
+	width : 100%;	
+}
+
+.center {
+	border-collapse : collapse;
+	margin-top : 30px;
+	margin-bottom : 30px;
+	margin-left: 30%;
+    margin-right: auto;
+    width : 8em;
+}
+
+.cart-btn{
+	margin-top: 30px;
+	margin-right: 60px;
+	padding-top: 0px;
+	border-style: normal;
+	border-width: thin;
+	float: right;
+	border-radius: 5px;
+	width: 40px;
+	height: 40px;
+}
+
+.bin-btn{
+	margin-right: 60px;
+	margin-left: 100px;
+	padding-top: 0px;
+	border-style: normal;
+	border-width: thin;
+	float: right;
+	border-radius: 5px;
+	width: 35px;
+	height: 35px;
+	z-index: 1;
+}
+
+#my-popup{
+	text-align: center;
+	Width: 300px;
+	Height: 60px;
+	Background: #F0FFFF;
+	color : red;
+	Box-sizing: border-box;
+	margin-bottom : 8px;
+	margin-top: 10px;
+	padding-top : 20px;
+	Position: relative;
+	display:none;
+	border-style: solid;
+	border-color: red;
+	border-radius: 30px;
+	border-width: 1px;
 }
