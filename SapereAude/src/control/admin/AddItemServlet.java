@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import models.AudioBookBean;
+import models.AudioBookDao;
 import models.DigitalBookBean;
 import models.DigitalBookDao;
 import models.ItemBean;
@@ -44,22 +46,44 @@ public class AddItemServlet extends HttpServlet {
 		
 		ItemDao itemDao = new ItemDao();
 		DigitalBookDao digitalBookDao = new DigitalBookDao();
+		AudioBookDao audioBookDao = new AudioBookDao();
 		
+		//generic item info 
 		String isbn = request.getParameter("ISBN");
 		String nome = request.getParameter("nome");
 		String casaEditrice = request.getParameter("casaEditrice");
 		String autore = request.getParameter("autore");
 		String categoria = request.getParameter("categoria");
-		int pages = Integer.valueOf(request.getParameter("pages"));
-		String lingua = request.getParameter("lingua");
-		double aPrice = Double.valueOf(request.getParameter("aPrice"));
-		double nPrice = Double.valueOf(request.getParameter("nPrice"));
 		
+		//digital book info
+		int pages = Integer.valueOf(request.getParameter("pages"));
+		System.out.println(pages);
+		String linguaBook = request.getParameter("linguaB");
+		double aPriceBook = Double.valueOf(request.getParameter("aPriceB"));
+		double nPriceBook = Double.valueOf(request.getParameter("nPriceB"));
+		
+		//audio book info
+		String durata = request.getParameter("durata");
+		String linguaAudio = request.getParameter("linguaA");
+		double aPriceAudio = Double.valueOf(request.getParameter("aPriceA"));
+		double nPriceAudio = Double.valueOf(request.getParameter("nPriceA"));
+		
+		InputStream book = null;
+		Part filePartB = request.getPart("book");
+		if(filePartB != null) {
+			book = filePartB.getInputStream();
+		}
+		
+		InputStream audiobook = null;
+		Part filePartA = request.getPart("audiobook");
+		if(filePartA != null) {
+			audiobook = filePartA.getInputStream();
+		}
 		
 		InputStream foto = null;
-		Part filePart = request.getPart("image");
-		if(filePart != null) {
-			foto = filePart.getInputStream();
+		Part filePartF = request.getPart("image");
+		if(filePartF != null) {
+			foto = filePartF.getInputStream();
 		}
 
 		try {
@@ -74,12 +98,22 @@ public class AddItemServlet extends HttpServlet {
 			DigitalBookBean digitalBook = new DigitalBookBean();
 			digitalBook.setISBNOpera(isbn);
 			digitalBook.setNumPagine(pages);
-			digitalBook.setLingua(lingua);
-			digitalBook.setCostoAcquisto(aPrice);
-			digitalBook.setCostoNoleggio(nPrice);
+			digitalBook.setLingua(linguaBook);
+			digitalBook.setCostoAcquisto(aPriceBook);
+			digitalBook.setCostoNoleggio(nPriceBook);
+			digitalBook.setBookFile(book);
+			
+			AudioBookBean audioBook = new AudioBookBean();
+			audioBook.setISBNOpera(isbn);
+			audioBook.setDurata(durata);
+			audioBook.setLingua(linguaAudio);
+			audioBook.setCostoAcquisto(aPriceAudio);
+			audioBook.setCostoNoleggio(nPriceAudio);
+			audioBook.setAudioFile(audiobook);
 			
 			itemDao.doSave(item);
 			digitalBookDao.doSave(digitalBook);
+			audioBookDao.doSave(audioBook);
 			
 			out.println("<center><h1>OPERA AGGIUNTA</h1></center>");
 			

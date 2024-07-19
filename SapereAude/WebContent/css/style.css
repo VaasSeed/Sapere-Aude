@@ -4,6 +4,7 @@ body {
 	background-color: #F0FFFF
 }
 
+
 div#tableContainer {
 	display: table;
 	width:100%;
@@ -46,25 +47,49 @@ div#header {
 	vertical-align : top;
 }
 
-ul{
-	border-radius : 10px;
+
+#filters{
+	display : inline;
+	vertical-align : center;
+	width : 70%;
+	float : left;
+	border-radius : 10px; 
+	text-align : center;
+	margin-top : 20px;
+	margin-bottom : 20px;
+	margin-right: 15%;
+	margin-left : 15%;
 }
 
-.navelement{
-	display: block;
-	padding: 0px;
+.l {
+	display: flex;
+	justify-content: center;
+	list-style-type: none;
+	border-radius: 10px;
 	background-color: #ADD8E6;
 	color: rgb(0, 0, 70);
 	transition-duration: 0.7s;
 	text-align: center;
-	width: 90%;
+	width: auto;
+}
+
+.navelement{
+	display: inline;
+	padding-right: 8px;
+	padding-left: 8px;
+	float : left;
+	background-color: #ADD8E6;
+	color: rgb(0, 0, 70);
+	transition-duration: 0.7s;
+	text-align: center;
+	border-radius : 10px;
+	width: auto;
 }
 
 .navelement:hover{
-	background-color: lightsteelblue;
 	color : rgb(0, 0, 70);
 	cursor : pointer;
-	transform : translatex(20px);
+	scale: 1.15;
 }
 
 .list{
@@ -83,17 +108,6 @@ ul{
   scale: 1.15;
 }
 
-#filters{
-	display : table-cell;
-	vertical-align : top;
-	width : 100%;
-	float : left;
-	border-radius : 10px; 
-	background-color : #ADD8E6;
-	text-align : center;
-	color : rgb(0, 0, 70);
-}
-
 .filter{
 	border-width: 0px;
 	background-color : #ADD8E6;
@@ -101,37 +115,39 @@ ul{
 }
 
 .bookImage{
-	padding : 10px 10px 20px 10px;
+	padding : 20px 10px 20px 10px;
 	margin : 10px 10px 10px 10px; 
 }
 
+.image{
+	width : 80%;
+	height: 70%;
+}
+
+
 #page{
+	display : block;
+	margin-right : 15%;
+	margin-left : 15%;
 	border : none;
-	height : 100%;
-	width : 100%;
+	height : 100vh;
+	width : 70%;
+	float : left;
 }
 
 #fil{
 	border-radius : 10px;
-	height : 100%;
+	height : auto;
 	width : 30%;
 	float : left;
+	clear : right;
 }
 
 #funcPage{
-	padding : 10px;
-	margin : 10px;
-	height : 500px;
-	width : 60%;
-	float : right;
-}
-
-.l {
-  list-style-type: none;
-  margin: 10px;
-  padding: 10px;
-  overflow: hidden;
-  background-color: #F0FFFF;
+	border-style : solid;
+	margin-left : 30%;
+	width : 90%;
+	float : left;
 }
 
 .i {

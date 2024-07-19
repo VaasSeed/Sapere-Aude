@@ -1,5 +1,6 @@
 package models;
 
+import java.io.InputStream;
 import java.io.Serializable;
 
 
@@ -19,13 +20,13 @@ public class AudioBookBean implements Serializable {
 		this.ISBNOpera = ISBNOpera;
 	}
 	
-	/*public bytes[] getAudioFile() {
+	public InputStream getAudioFile() {
 		return audioFile;
 	}
 	
-	public void setAudioFile(bytes[] audioFile) {
+	public void setAudioFile(InputStream audioFile) {
 		this.audioFile = audioFile;
-	}*/
+	}
 	
 	public String getDurata() {
 		return durata;
@@ -62,7 +63,7 @@ public class AudioBookBean implements Serializable {
 	
 	
 	private String ISBNOpera;
-//	private bytes[] audioFile;
+	private InputStream audioFile;
 	private String durata;
 	private String lingua;
 	private double costoAcquisto;

@@ -101,6 +101,7 @@ function printDigitalBook(request){
 		sessionStorage.setItem("Type", "libro");
 
 		var photo = document.createElement("img");
+		photo.classList.add("image");
 		photo.src = src;
 		root.append(photo); 
 		
@@ -156,6 +157,7 @@ function printAudioBook(request){
 		sessionStorage.setItem("Type", "audiolibro");
 
 		var photo = document.createElement("img");
+		photo.classList.add("image");
 		photo.src = src;
 		root.append(photo); 
 

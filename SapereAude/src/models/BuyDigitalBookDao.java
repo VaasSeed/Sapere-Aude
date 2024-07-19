@@ -104,10 +104,13 @@ public class BuyDigitalBookDao implements BuyDigitalBookDaoInterface {
 					
 					Calendar c = Calendar.getInstance();
 					c.setTime(rs.getDate("dataAcquisto"));
-					DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-					String dateAsString = df.format(c.getTime());
 					
-					buyDigitalBook.setDataAcquisto(dateAsString);
+					if(rs.getDate("dataAcquisto") != null) {
+						DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+						String dateAsString = df.format(c.getTime());
+						buyDigitalBook.setDataAcquisto(dateAsString);
+					}
+				
 					buyDigitalBook.setTipoOpera(rs.getString("tipoOpera"));
 					buyDigitalBook.setISBNOpera(rs.getString("ISBNOpera"));
 					buyDigitalBook.setNomeOpera(rs.getString("nomeOpera"));
@@ -154,18 +157,21 @@ public class BuyDigitalBookDao implements BuyDigitalBookDaoInterface {
 			preparedStatement.setInt(1, order);
 
 			ResultSet rs = preparedStatement.executeQuery();
+			DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 			
 			while (rs.next()) {
 				BuyDigitalBookBean buyDigitalBook = new BuyDigitalBookBean();
 				
 				buyDigitalBook.setIdAcquisto(rs.getInt("idAcquisto"));
 				
-				DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 				Calendar c = Calendar.getInstance();
 				c.setTime(rs.getDate("dataAcquisto"));
-				String dateAsString = df.format(c.getTime());
 				
-				buyDigitalBook.setDataAcquisto(dateAsString);
+				if(rs.getDate("dataAcquisto") != null) {
+					String dateAsString = df.format(c.getTime());
+					buyDigitalBook.setDataAcquisto(dateAsString);
+				}
+				
 				buyDigitalBook.setTipoOpera(rs.getString("tipoOpera"));
 				buyDigitalBook.setISBNOpera(rs.getString("ISBNOpera"));
 				buyDigitalBook.setNomeOpera(rs.getString("nomeOpera"));
@@ -262,13 +268,13 @@ public class BuyDigitalBookDao implements BuyDigitalBookDaoInterface {
 	}
 	
 	@Override
-	public synchronized void updateDate() throws SQLException {
+	public synchronized void updateDate(int id) throws SQLException {
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 
-		String updateSQL = "UPDATE " + BuyDigitalBookDao.TABLE_NAME + " INNER JOIN ordine ON ordine = idOrdine"
-						+ " SET dataAcquisto = ?, dataOrdine = ? WHERE stato = 0";
+		String updateSQL = "UPDATE " + BuyDigitalBookDao.TABLE_NAME 
+						+ " SET dataAcquisto = ? WHERE idAcquisto = ?";
 		
 		try {
 			
@@ -280,7 +286,7 @@ public class BuyDigitalBookDao implements BuyDigitalBookDaoInterface {
 			connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(updateSQL);
 			preparedStatement.setString(1, todayAsString);
-			preparedStatement.setString(2, todayAsString);
+			preparedStatement.setInt(2, id);
 			
 			preparedStatement.executeUpdate();
 			connection.commit();

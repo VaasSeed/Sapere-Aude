@@ -11,7 +11,13 @@ public interface OrderDaoInterface {
 	
 	public OrderBean doRetrieveByKey(int id) throws SQLException;
 	
-	public ArrayList<OrderBean> doRetrieveAll(String organize) throws SQLException;
+	public ArrayList<OrderBean> doRetrieveAll(String user, int status, String organize) throws SQLException;
 	
 	public void doUpdateCost(int id, double cost) throws SQLException;
+	
+	public void updateDate(int id) throws SQLException;
+	
+	public void updateStatus(int id) throws SQLException;
+	
+	public void setCard(int id, String card) throws SQLException;
 }

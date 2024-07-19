@@ -93,6 +93,9 @@ public class LogoutServlet extends HttpServlet {
 				int idOrder = order.getIdOrdine();
 				double total = order.getImportoTotale(); 
 				
+				BuyDigitalBookDao buyDao = new BuyDigitalBookDao();
+				RentDigitalBookDao rentDao = new RentDigitalBookDao();
+				
 				for(OrderItem item : items) {
 					String ISBNOpera = item.getISBNOpera();
 					String nomeOpera = item.getNomeOpera();
@@ -101,7 +104,6 @@ public class LogoutServlet extends HttpServlet {
 					double costo = item.getCosto();
 						
 					if(operazione.equals("acquisto")) {
-						BuyDigitalBookDao buyDao = new BuyDigitalBookDao();
 						
 						Boolean check = buyDao.alreadySaved(ISBNOpera, idOrder, tipoOpera);
 						
@@ -119,7 +121,6 @@ public class LogoutServlet extends HttpServlet {
 						}
 					}
 					else if(operazione.equals("noleggio")){
-						RentDigitalBookDao rentDao = new RentDigitalBookDao();
 						
 						Boolean check = rentDao.alreadySaved(ISBNOpera, idOrder, tipoOpera);
 						if(check) {

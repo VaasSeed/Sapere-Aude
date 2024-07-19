@@ -1,7 +1,6 @@
 package models;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -105,13 +104,22 @@ public class RentDigitalBookDao implements RentDigitalBookDaoInterface {
 					rentDigitalBook.setIdNoleggio(rs.getInt("idNoleggio"));
 					
 					DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-					Date begin = rs.getDate("dataInizioNoleggio");
-					String beginAsString = df.format(begin);
-					Date end = rs.getDate("dataFineNoleggio");
-					String endAsString = df.format(end);
+					Calendar c = Calendar.getInstance();
+					c.setTime(rs.getDate("dataInizioNoleggio"));
 					
-					rentDigitalBook.setDataInizioNoleggio(beginAsString);
-					rentDigitalBook.setDataFineNoleggio(endAsString);
+					if(rs.getDate("dataInizioNoleggio") != null) {
+						String beginAsString = df.format(c.getTime());
+						rentDigitalBook.setDataInizioNoleggio(beginAsString);
+					}
+					
+					Calendar c2 = Calendar.getInstance();
+					c2.setTime(rs.getDate("dataFineNoleggio"));
+					
+					if(rs.getDate("dataFineNoleggio") != null) {
+						String endAsString = df.format(c2.getTime());
+						rentDigitalBook.setDataFineNoleggio(endAsString);
+					}
+
 					rentDigitalBook.setTipoOpera(rs.getString("tipoOpera"));
 					rentDigitalBook.setISBNOpera(rs.getString("ISBNOpera"));
 					rentDigitalBook.setNomeOpera(rs.getString("nomeOpera"));
@@ -159,23 +167,28 @@ public class RentDigitalBookDao implements RentDigitalBookDaoInterface {
 
 			ResultSet rs = preparedStatement.executeQuery();
 			
+			DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 			while (rs.next()) {
 				RentDigitalBookBean rentDigitalBook = new RentDigitalBookBean();
 				
 				rentDigitalBook.setIdNoleggio(rs.getInt("idNoleggio"));
 				
-				DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-				
 				Calendar c = Calendar.getInstance();
 				c.setTime(rs.getDate("dataInizioNoleggio"));
-				String beginAsString = df.format(c.getTime());
+				
+				if(rs.getDate("dataInizioNoleggio") != null) {
+					String beginAsString = df.format(c.getTime());
+					rentDigitalBook.setDataInizioNoleggio(beginAsString);
+				}
 				
 				Calendar c2 = Calendar.getInstance();
 				c2.setTime(rs.getDate("dataFineNoleggio"));
-				String endAsString = df.format(c2.getTime());
 				
-				rentDigitalBook.setDataInizioNoleggio(beginAsString);
-				rentDigitalBook.setDataFineNoleggio(endAsString);
+				if(rs.getDate("dataFineNoleggio") != null) {
+					String endAsString = df.format(c2.getTime());
+					rentDigitalBook.setDataFineNoleggio(endAsString);
+				}
+				
 				rentDigitalBook.setTipoOpera(rs.getString("tipoOpera"));
 				rentDigitalBook.setISBNOpera(rs.getString("ISBNOpera"));
 				rentDigitalBook.setNomeOpera(rs.getString("nomeOpera"));
@@ -269,5 +282,50 @@ public class RentDigitalBookDao implements RentDigitalBookDaoInterface {
 				}
 		 }
 		return Boolean.TRUE;
+	}
+	
+	@Override
+	public synchronized void updateDate(int id) throws SQLException {
+
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		String updateSQL = "UPDATE " + RentDigitalBookDao.TABLE_NAME 
+						+ " SET dataInizioNoleggio = ?, dataFineNoleggio = ? WHERE idNoleggio = ?";
+		
+		try {
+			
+			Calendar c = Calendar.getInstance();
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
+			String todayAsString = dateFormat.format(c.getTime());
+			
+			c.add(Calendar.MONTH, 1);
+			String end = dateFormat.format(c.getTime());
+			
+			connection = ds.getConnection();
+			connection.setAutoCommit(false);
+			preparedStatement = connection.prepareStatement(updateSQL);
+			preparedStatement.setString(1, todayAsString);
+			preparedStatement.setString(2, end);
+			preparedStatement.setInt(3, id);
+			
+			preparedStatement.executeUpdate();
+			connection.commit();
+		}
+		catch (Exception ex) 
+		{
+			System.out.println("UPDATE DATE failed: An Exception has occurred! " + ex); 
+		}
+		 finally {
+				try {
+					if (preparedStatement != null)
+							preparedStatement.close();
+				} 
+				finally {
+					if (connection != null)
+							connection.close();
+				}
+		 }
+		
 	}
 }

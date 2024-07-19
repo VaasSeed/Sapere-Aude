@@ -1,6 +1,18 @@
+function home(){
+	var currentLocation = window.location.href;
+	window.location.assign(currentLocation.substring(0, 33) + "common/Home.jsp");
+	return false;
+}
+
 function itemsFunction() {
     var url = '../ItemsServlet';
     loadAjaxDoc(url, "GET", printItems);
+}
+
+
+function userItemsFunction() {
+    var url = '../UserItems';
+    loadAjaxDoc(url, "GET", printUserItems);
 }
 
 function createXMLHttpRequest() {
@@ -63,10 +75,75 @@ function loadAjaxDoc(url, method, cFuction) {
 	}
 }
 
+function printUserItems(request){
+	var response = JSON.parse(request.responseText);
+	
+	var root = document.getElementById("hi");
+	while (root.firstChild) {
+	    root.removeChild(root.firstChild);
+	}
+	
+	for(var i = 0; i < response.length; i++){
+		
+		var ph = response[i].Foto;
+		var isbn = response[i].ISBN;
+		var name = response[i].Nome;
+		var author = response[i].Autore;
+		var rentEnd = response[i].FineNoleggio
+		var tipo = response[i].Tipo;
+		var operazione = response[i].Operazione;
+		
+		var div = document.createElement("button");
+		div.classList.add("list");
+		div.setAttribute("type", "button");
+		
+		var photo = document.createElement("img");
+		photo.classList.add("image");
+		div.classList.add("bookImage");
+		var src = "data:image/png;base64," + ph;
+		photo.src = src;
+		
+		div.appendChild(photo);
+		
+		div.innerHTML += "<br>" + name + "<br>";
+		
+		div.innerHTML += author + "<br>";
+		
+		div.innerHTML += tipo + "<br>";
+		
+		div.innerHTML += "Opera " + operazione + "<br>";
+		
+		if(rentEnd != "no"){
+			div.innerHTML += "Data fine noleggio: " + rentEnd + "<br>";
+		}
+		
+		
+		var button = document.createElement('a');
+		
+		if(tipo == "libro"){
+			button.setAttribute("href", "ReadBook.jsp?isbn="+isbn);
+			button.innerHTML = "LEGGI";
+		}
+		else{
+			button.setAttribute("href", "ListenBook.jsp?isbn="+isbn);
+			button.innerHTML = "ASCOLTA";
+		}
+	
+		div.append(button);	
+		root.append(div);
+		
+	}
+}
+
 function printItems(request){
 	var response = JSON.parse(request.responseText);
+	
+	var root = document.getElementById("hi");
+	while (root.firstChild) {
+	    root.removeChild(root.firstChild);
+	}
+	
 	for(var i = 0; i < response.length; i++){
-		var root = document.getElementById("hi");
 		
 		var isbn = response[i].ISBN;
 		var name = response[i].Nome;
@@ -86,6 +163,7 @@ function printItems(request){
 		div.setAttribute("type", "button");
 		
 		var photo = document.createElement("img");
+		photo.classList.add("image");
 		div.classList.add("bookImage");
 		var src = "data:image/png;base64," + ph;
 		photo.src = src;

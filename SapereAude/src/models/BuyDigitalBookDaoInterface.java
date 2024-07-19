@@ -15,5 +15,5 @@ public interface BuyDigitalBookDaoInterface {
 	
 	public Boolean alreadySaved(String ISBN, int order, String type) throws SQLException;
 	
-	public void updateDate() throws SQLException;
+	public void updateDate(int id) throws SQLException;
 }

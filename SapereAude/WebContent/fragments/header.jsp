@@ -24,8 +24,8 @@
 		<a href="Cart.jsp">
  			<img class = "cart-btn" src="../images/cart.png">
 		</a>
-		<input class = "btn" type = "button" value= "ESCI" onclick = "logoutFunction()">
-		<% if(admin != null){%>
+		<input class = "btn" type = "button" value= "ACCOUNT" onclick = "accountFunction()">
+		<% if(admin == true){%>
 		<input class = "btn" type = "button" value= "ADMIN" onclick = "adminFunction()">
 		<% }%>
  	</div>
@@ -41,15 +41,13 @@
  			return false;
  		}
  		
- 		function logoutFunction(){
+ 		function accountFunction(){
  			var currentLocation = window.location.href;
- 			console.log(currentLocation);
- 			window.location.assign(currentLocation.substring(0, 33) + "LogoutServlet");
+ 			window.location.assign(currentLocation.substring(0, 33) + "common/accountHome.jsp");
  			return false;
  		}
  		function adminFunction(){
  			var currentLocation = window.location.href;
- 			console.log(currentLocation);
  			window.location.assign(currentLocation.substring(0, 33) + "admin/adminHome.jsp");
  			return false;
  		}

@@ -42,10 +42,18 @@
 					</td>
 				</tr>
 				<%
+			}%>
+			</table>
+			<input type = "button" value = "Checkout" class = "" onclick = "orderSummary()">
+		<%}%>
+		
+		<script>
+			function orderSummary(){
+	 			var currentLocation = window.location.href;
+	 			window.location.assign(currentLocation.substring(0, 33) + "common/OrderSummary.jsp");
+	 			return false;
 			}
-		}
-		%>
-		</table>
+		</script>
 	
 </body>
 </html>

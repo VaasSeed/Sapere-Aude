@@ -1,5 +1,6 @@
 package models;
 
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,7 +40,7 @@ public class DigitalBookDao implements DigitalBookDaoInterface {
 		PreparedStatement preparedStatement = null;
 
 		String insertSQL = "INSERT INTO " + DigitalBookDao.TABLE_NAME
-						+ " (ISBNOpera, numeroPagine, linguaTesto, costoAcquisto, costoNoleggio) VALUES (?, ?, ?, ?, ?) ";
+						+ " (ISBNOpera, bookFile, numeroPagine, linguaTesto, costoAcquisto, costoNoleggio) VALUES (?, ?, ?, ?, ?, ?) ";
 		
 		try {
 			connection = ds.getConnection();
@@ -47,10 +48,11 @@ public class DigitalBookDao implements DigitalBookDaoInterface {
 			preparedStatement = connection.prepareStatement(insertSQL);
 			
 			preparedStatement.setString(1, digitalBook.getISBNOpera());
-			preparedStatement.setInt(2, digitalBook.getNumPagine());
-			preparedStatement.setString(3, digitalBook.getLingua());
-			preparedStatement.setDouble(4, digitalBook.getCostoAcquisto());
-			preparedStatement.setDouble(5, digitalBook.getCostoNoleggio());
+			preparedStatement.setBlob(2, digitalBook.getBookFile());
+			preparedStatement.setInt(3, digitalBook.getNumPagine());
+			preparedStatement.setString(4, digitalBook.getLingua());
+			preparedStatement.setDouble(5, digitalBook.getCostoAcquisto());
+			preparedStatement.setDouble(6, digitalBook.getCostoNoleggio());
 		
 			preparedStatement.executeUpdate();
 
@@ -98,6 +100,8 @@ public class DigitalBookDao implements DigitalBookDaoInterface {
 				else if (more) 
 				{
 					digitalBook.setISBNOpera(rs.getString("ISBNOpera"));
+					Blob blob = rs.getBlob("bookFile");
+					digitalBook.setBookFile(blob.getBinaryStream());
 					digitalBook.setNumPagine(rs.getInt("numeroPagine"));
 					digitalBook.setLingua(rs.getString("linguaTesto"));
 					digitalBook.setCostoAcquisto(rs.getDouble("costoAcquisto"));
@@ -145,6 +149,8 @@ public class DigitalBookDao implements DigitalBookDaoInterface {
 			while (rs.next()) {
 				DigitalBookBean digitalBook = new DigitalBookBean();
 				digitalBook.setISBNOpera(rs.getString("ISBNOpera"));
+				Blob blob = rs.getBlob("bookFile");
+				digitalBook.setBookFile(blob.getBinaryStream());
 				digitalBook.setNumPagine(rs.getInt("numeroPagine"));
 				digitalBook.setLingua(rs.getString("linguaTesto"));
 				digitalBook.setCostoAcquisto(rs.getDouble("costoAcquisto"));

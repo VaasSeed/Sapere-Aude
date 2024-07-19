@@ -14,4 +14,6 @@ public interface RentDigitalBookDaoInterface {
 	public void doDelete(int id) throws SQLException;
 	
 	public Boolean alreadySaved(String ISBN, int order, String type) throws SQLException;
+	
+	public void updateDate(int id) throws SQLException;
 }

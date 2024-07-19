@@ -15,17 +15,14 @@
   	<div>
   		<%@include file="../fragments/header.jsp"%>
   	</div>
-  	<div id="tableContainer">
-	<div id="tableRow">
 	  	<section id="filters">
-	  		<ul>
-				<li class = "navelement"><input type = "button" class = "filter" value= "Avventura"></li>
-				<li class = "navelement">Horror</li>
-				<li class = "navelement">Fantasy</li>
-				<li class = "navelement">Giallo</li>
+	  		<ul class = "l">
+				<li class = "navelement"><input type = "button" class = "filter" value= "Home" onclick = "home()"></li>
+				<li class = "navelement"><input type = "button" class = "filter" value= "Le mie opere" onclick = "userItemsFunction()"></li>
 			</ul>
 	  	</section>
-  	
+  	<div id="tableContainer">
+	<div id="tableRow">
 		<section id ="hi">
 		</section>
 	</div>

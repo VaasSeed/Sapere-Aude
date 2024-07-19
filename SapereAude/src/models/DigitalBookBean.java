@@ -1,5 +1,6 @@
 package models;
 
+import java.io.InputStream;
 import java.io.Serializable;
 
 public class DigitalBookBean implements Serializable {
@@ -18,13 +19,13 @@ public class DigitalBookBean implements Serializable {
 		this.ISBNOpera = ISBNOpera;
 	}
 	
-	/*public bytes[] getBookFile() {
+	public InputStream getBookFile() {
 		return bookFile;
 	}
 	
-	public void setBookFile(bytes[] bookFile) {
+	public void setBookFile(InputStream bookFile) {
 		this.bookFile = bookFile;
-	}*/
+	}
 	
 	public int getNumPagine() {
 		return numPagine;
@@ -61,7 +62,7 @@ public class DigitalBookBean implements Serializable {
 	
 	
 	private String ISBNOpera;
-//	private bytes[] bookFile;
+	private InputStream bookFile;
 	private int numPagine;
 	private String lingua;
 	private double costoAcquisto;

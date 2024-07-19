@@ -1,5 +1,6 @@
 package models;
 
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,17 +40,18 @@ public class AudioBookDao implements AudioBookDaoInterface {
 		PreparedStatement preparedStatement = null;
 
 		String insertSQL = "INSERT INTO " + AudioBookDao.TABLE_NAME
-						+ " (ISBNOpera, durata, linguaAudio, costoAcquisto, costoNoleggio) VALUES (?, ?, ?, ?, ?) ";
+						+ " (ISBNOpera, audioFile, durata, linguaAudio, costoAcquisto, costoNoleggio) VALUES (?, ?, ?, ?, ?, ?) ";
 		
 		try {
 			connection = ds.getConnection();
 			connection.setAutoCommit(false);
 			preparedStatement = connection.prepareStatement(insertSQL);
 			preparedStatement.setString(1, audioBook.getISBNOpera());
-			preparedStatement.setString(2, audioBook.getDurata());
-			preparedStatement.setString(3, audioBook.getLingua());
-			preparedStatement.setDouble(4, audioBook.getCostoAcquisto());
-			preparedStatement.setDouble(5, audioBook.getCostoNoleggio());
+			preparedStatement.setBlob(2, audioBook.getAudioFile());
+			preparedStatement.setString(3, audioBook.getDurata());
+			preparedStatement.setString(4, audioBook.getLingua());
+			preparedStatement.setDouble(5, audioBook.getCostoAcquisto());
+			preparedStatement.setDouble(6, audioBook.getCostoNoleggio());
 		
 			preparedStatement.executeUpdate();
 
@@ -77,7 +79,7 @@ public class AudioBookDao implements AudioBookDaoInterface {
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
 		
-		AudioBookBean digitalBook = new AudioBookBean();
+		AudioBookBean audioBook = new AudioBookBean();
 		
 		String searchQuery = "select * from " + AudioBookDao.TABLE_NAME
 							+ "	where ISBNOpera = ?";
@@ -94,11 +96,13 @@ public class AudioBookDao implements AudioBookDaoInterface {
 					return null;
 				else if (more) 
 				{
-					digitalBook.setISBNOpera(rs.getString("ISBNOpera"));
-					digitalBook.setDurata(rs.getString("durata"));
-					digitalBook.setLingua(rs.getString("linguaAudio"));
-					digitalBook.setCostoAcquisto(rs.getDouble("costoAcquisto"));
-					digitalBook.setCostoNoleggio(rs.getDouble("costoNoleggio"));
+					audioBook.setISBNOpera(rs.getString("ISBNOpera"));
+					Blob blob = rs.getBlob("audioFile");
+					audioBook.setAudioFile(blob.getBinaryStream());
+					audioBook.setDurata(rs.getString("durata"));
+					audioBook.setLingua(rs.getString("linguaAudio"));
+					audioBook.setCostoAcquisto(rs.getDouble("costoAcquisto"));
+					audioBook.setCostoNoleggio(rs.getDouble("costoNoleggio"));
 				}
 			}
 			catch (SQLException ex) 
@@ -116,7 +120,7 @@ public class AudioBookDao implements AudioBookDaoInterface {
 			}
 	 }
 
-		return digitalBook;
+		return audioBook;
 	}
 	
 	@Override
@@ -142,6 +146,8 @@ public class AudioBookDao implements AudioBookDaoInterface {
 			while (rs.next()) {
 				AudioBookBean audioBook = new AudioBookBean();
 				audioBook.setISBNOpera(rs.getString("ISBNOpera"));
+				Blob blob = rs.getBlob("audioFile");
+				audioBook.setAudioFile(blob.getBinaryStream());
 				audioBook.setDurata(rs.getString("durata"));
 				audioBook.setLingua(rs.getString("linguaAudio"));
 				audioBook.setCostoAcquisto(rs.getDouble("costoAcquisto"));
