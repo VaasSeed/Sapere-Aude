@@ -4,11 +4,14 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<link rel="stylesheet" type="text/css" href="./css/style.css">
 <title>Registrazione</title>
 <script type="text/javascript" src="scripts/validate.js"></script>
 </head>
 <body>
-
+	<h1 class="welcome">Benvenuto nella pagina di registrazione</h1>
+	<div class = "reg">
+	<h3> Registrati: </h3>
 	<form id="regForm" method="post" action="RegistrazioneServlet">
 		<label for="name">Inserisci il nome:</label> 
 		<input id="name" name="name" type="text" required pattern = "^[A-Za-z]+$"
@@ -34,11 +37,12 @@
 		<span id="errorPassword"></span> <br>
 		
 		<label for="bDate">Inserisci la tua data di nascita:</label> 
-		<input id="bDate" name="bDate" type="text" placeholder = "gg-mm-aaaa" required pattern = "(\d{2,})-(\d{2,})-(\d{4,})"	
+		<input id="bDate" name="bDate" type="text" placeholder = "gg-mm-aaaa" required pattern = "(\d{2})-(\d{2})-(\d{4})"	
 		onblur="validateFormElem(this, document.getElementById('errorDate'), dateErrorMessage)">
 		<span id="errorDate"></span><br> 
 		
-		<br> <input type="submit" value="REGISTRATI" onclick = "return validate()">
+		<br> <input class = "reg-btn" type="submit" value="REGISTRATI" onclick = "return validate()">
 	</form>
+	</div>
 </body>
 </html>

@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="./css/style.css">
 <title>ACCESSO</title>
 </head>
 <body>
@@ -16,6 +17,9 @@
 		}
 	}
 	%>
+	<h1 class="welcome">Benvenuto nella pagina di accesso</h1>
+	<div class = "acc">
+	<h3> Accedi: </h3>
 		<form id = "accForm" method = "post" action = "AccessoServlet">
 			<label for = "username" >USERNAME:</label>
 			<input id = "username" type = "text" name = "username" required>
@@ -23,7 +27,8 @@
 			<label for="pswd">PASSWORD:</label>
 			<input id = "pswd" name = "pswd" type = "password" required>
 			<br>
-			<input type="submit" value = "ACCEDI">
+			<input class = "acc-btn" type="submit" value = "ACCEDI">
 		</form>
+	</div>
 </body>
 </html>

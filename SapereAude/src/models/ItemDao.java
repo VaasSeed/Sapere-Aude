@@ -105,7 +105,6 @@ public class ItemDao implements ItemDaoInterface {
 					item.setISBN(rs.getString("ISBN"));
 					item.setNome(rs.getString("nome"));
 					item.setCasaEditrice(rs.getString("casaEditrice"));
-					item.setMediaVoti(rs.getDouble("mediaVoti"));
 					item.setAutore(rs.getString("autore"));
 					item.setCategoria(rs.getString("categoria"));
 					Blob blob = rs.getBlob("photo");
@@ -155,7 +154,6 @@ public class ItemDao implements ItemDaoInterface {
 				item.setISBN(rs.getString("ISBN"));
 				item.setNome(rs.getString("nome"));
 				item.setCasaEditrice(rs.getString("casaEditrice"));
-				item.setMediaVoti(rs.getDouble("mediaVoti"));
 				item.setAutore(rs.getString("autore"));
 				item.setCategoria(rs.getString("categoria"));
 				Blob blob = rs.getBlob("photo");
@@ -178,5 +176,96 @@ public class ItemDao implements ItemDaoInterface {
 				}
 		 }
 		return items;
+	}
+	
+	
+	@Override
+	public synchronized void doUpdate(String isbn, ItemBean updated) throws SQLException {
+	
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		String updateSQL = "UPDATE " + ItemDao.TABLE_NAMEO 
+				         + " SET nome = ?, casaEditrice = ?, autore = ?, categoria = ?, photo = ?"
+				         + " WHERE ISBN = ?";
+		
+		String nome = updated.getNome();
+		String casaEditrice = updated.getCasaEditrice();
+		String autore = updated.getAutore();
+		String categoria = updated.getCategoria();
+		InputStream photo = updated.getFoto();
+		
+		try {
+			connection = ds.getConnection();
+			connection.setAutoCommit(false);
+			preparedStatement = connection.prepareStatement(updateSQL);
+			
+			preparedStatement.setString(1, nome);
+			preparedStatement.setString(2, casaEditrice);
+			preparedStatement.setString(3, autore);
+			preparedStatement.setString(4, categoria);
+			preparedStatement.setBlob(5, photo);
+			preparedStatement.setString(6, isbn);
+			preparedStatement.executeUpdate();
+
+			connection.commit();
+		}
+		catch (SQLException ex) 
+		{
+			System.out.println("UPDATE operation failed: An Exception has occurred! " + ex); 
+		}
+		finally {
+			try {
+				if (preparedStatement != null)
+						preparedStatement.close();
+				} 
+		finally {
+			if (connection != null)
+				connection.close();
+		}
+		}
+	}
+	
+	@Override
+	public synchronized void doDelete(String isbn) throws SQLException {
+		
+		Connection connection = null;
+		PreparedStatement c1 = null;
+		PreparedStatement preparedStatement = null;
+		PreparedStatement c2 = null;
+		
+		String check1 = " set foreign_key_checks = 0 ";
+		String insertSQL = "DELETE FROM " + ItemDao.TABLE_NAMEO
+						+ " WHERE ISBN = ? ";
+		String check2 = " set foreign_key_checks = 1 ";
+		
+		try {
+			connection = ds.getConnection();
+			connection.setAutoCommit(false);
+			c1 = connection.prepareStatement(check1);
+			preparedStatement = connection.prepareStatement(insertSQL);
+			preparedStatement.setString(1, isbn);
+			c2 = connection.prepareStatement(check2);
+		
+			c1.executeUpdate();
+			preparedStatement.executeUpdate();
+			c2.executeUpdate();
+			
+			connection.commit();
+		}
+		catch (SQLException ex) 
+		{
+			System.out.println("DELETE operation failed: An Exception has occurred! " + ex); 
+		}
+		 finally {
+				try {
+					if (preparedStatement != null)
+						preparedStatement.close();
+				} 
+				finally {
+					if (connection != null)
+						connection.close();
+				}
+		 }
 	}
 }

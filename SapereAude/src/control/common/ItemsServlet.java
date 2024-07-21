@@ -38,7 +38,7 @@ public class ItemsServlet extends HttpServlet {
 		response.setContentType("application/json");
 		PrintWriter out = response.getWriter();
 		try {
-			ArrayList<ItemBean> items = dao.doRetrieveAll("mediaVoti");
+			ArrayList<ItemBean> items = dao.doRetrieveAll(null);
 			JSONArray jArray= new JSONArray();
 			for(ItemBean item : items) {
 				JSONObject json = new JSONObject();
@@ -47,7 +47,6 @@ public class ItemsServlet extends HttpServlet {
 				String nome = item.getNome();
 				String casaEditrice = item.getCasaEditrice();
 				String categoria = item.getCategoria();
-				double mediaVoti = item.getMediaVoti();
 				String Autore = item.getAutore();
 				InputStream foto = item.getFoto();
 				
@@ -70,7 +69,6 @@ public class ItemsServlet extends HttpServlet {
 				json.put("Nome", nome);
 				json.put("CasaEditrice", casaEditrice);
 				json.put("Categoria", categoria);
-				json.put("MediaVoti", mediaVoti);
 				json.put("Autore", Autore);
 				json.put("Foto", base64Image);
 				jArray.add(json);

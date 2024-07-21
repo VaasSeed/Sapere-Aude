@@ -35,14 +35,6 @@ public class ItemBean implements Serializable {
 		this.casaEditrice = casaEditrice;
 	}
 	
-	public double getMediaVoti() {
-		return mediaVoti;
-	}
-	
-	public void setMediaVoti(double mediaVoti) {
-		this.mediaVoti = mediaVoti;
-	}
-	
 	public String getAutore() {
 		return Autore;
 	}
@@ -70,7 +62,6 @@ public class ItemBean implements Serializable {
 	private String isbn;
 	private String nome;
 	private String casaEditrice;
-	private double mediaVoti;
 	private String Autore;
 	private String categoria;
 	private InputStream foto;

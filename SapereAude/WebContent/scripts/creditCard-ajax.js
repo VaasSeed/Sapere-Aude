@@ -78,3 +78,69 @@ function loadAjaxDoc(url, params, method, cFuction) {
 function goBack(){
 	location.reload();
 }
+
+
+const numeroErrorMessage = "Numero carta non valido, inserire una sequenza numerica di lunghezza 16";
+const codiceErrorMessage = "Codice di sicurezza non valido";
+const emptyFieldErrorMessage = "Questo campo non deve essere vuoto";
+const scadenzaErrorMessage = "Formato non valido, inserire la scadenza nella forma MM-YY";
+const ownerErrorMessage = "Inserire correttamente l'intestatario";
+const scadutaErrorMessage = "La carta di credito \u00E8 scaduta"
+
+function validateFormElem(formElem, span, errorMessage) {
+	if(formElem.checkValidity()){
+		if(formElem.id == "scadenza"){
+			var today = new Date();
+			var scadenza = new Date("20"+formElem.value.substring(3,5)+"-"+formElem.value.substring(0,2)+"-21");
+			var y = today.getFullYear() - scadenza.getFullYear();
+			var m = today.getMonth() - scadenza.getMonth();
+			if (y > 0) {
+				span.style.color = "red";
+				span.innerHTML = scadutaErrorMessage;
+				return false;
+			}
+			else if(y == 0){
+				if(m > 0){
+					span.style.color = "red";
+					span.innerHTML = scadutaErrorMessage;
+					return false;	
+				}
+			}
+		}
+		span.style.color = "black";
+		span.innerHTML = "";
+		return true;
+	}
+	span.style.color = "red";
+	if (formElem.validity.valueMissing){
+		span.innerHTML = emptyFieldErrorMessage;
+	} else {
+		span.innerHTML = errorMessage;
+	}
+	return false;
+}
+
+
+function validate() {
+	let valid = true;	
+	let form = document.getElementById("cardForm");
+	
+	let spanNumero = document.getElementById("errorNumero");
+	if(!validateFormElem(form.numero, spanNumero, numeroErrorMessage)){
+		valid = false;
+	} 
+	let spanCodice = document.getElementById("errorCodice");
+	if (!validateFormElem(form.code, spanCodice, codiceErrorMessage)){
+		valid = false;
+	}
+	let spanScadenza = document.getElementById("errorScadenza");
+	if (!validateFormElem(form.scadenza, spanScadenza, scadenzaErrorMessage)){
+		valid = false;
+	}
+	let spanOwner = document.getElementById("errorOwner");
+	if (!validateFormElem(form.owner, spanOwner, ownerErrorMessage)){
+		valid = false;
+	}
+	
+	return valid;
+}

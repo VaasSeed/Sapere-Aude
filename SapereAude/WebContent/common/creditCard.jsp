@@ -29,7 +29,7 @@
 					<td style="border-bottom: 2px solid black;">
 						<h5>Numero Carta: </h5> <%=num%> <br>
 						<h5>Scadenza: </h5> <%=card.getScadenza()%><br>
-						<h5>Scadenza: </h5> <%=card.getIntestatario()%><br>
+						<h5>Intestatario: </h5> <%=card.getIntestatario()%><br>
 					</td>
 					<td id = "bin" style="border-bottom: 2px solid black;">
 						<a href="#" onclick = "deleteCard('<%=num%>')">
@@ -42,18 +42,33 @@
 		}
 		%>
 		</table><br>
+		<div class = "addCard">
 		<h3>Aggiungi una nuova carta:</h3>
-		<form action = "../AddCreditCardServlet" method = "post">
+		<form id = "cardForm" action = "../AddCreditCardServlet" method = "post">
+			
 			<lable for = "numero">Numero carta: </lable>
-			<input type = "text" id = "numero" name = "numero"><br>
+			<input type = "text" id = "numero" name = "numero" required pattern = "^(\d{16})$"
+			onblur = "validateFormElem(this, document.getElementById('errorNumero'), numeroErrorMessage)">
+			<span id = "errorNumero"></span><br>
+			
 			<lable for = "code">Codice di sicurezza: </lable>
-			<input type = "text" id = "code" name = "code"><br>
+			<input type = "text" id = "code" name = "code" required pattern = "^(\d{3})$"
+			onblur = "validateFormElem(this, document.getElementById('errorCodice'), codiceErrorMessage)">
+			<span id = "errorCodice"></span><br>
+			
 			<lable for = "scadenza">Scadenza: </lable>
-			<input type = "text" id = "scadenza" name ="scadenza" placeholder = "mm-aa"><br>
+			<input type = "text" id = "scadenza" name ="scadenza" placeholder = "mm-aa" required pattern = "^(\d{2})-(\d{2})$"
+			onblur = "validateFormElem(this, document.getElementById('errorScadenza'), scadenzaErrorMessage)">
+			<span id = "errorScadenza"></span><br>
+			
 			<lable for = "owner">Intestatario: </lable>
-			<input type = "text" id = "owner" name = "owner"><br>
-			<input type = "submit" value = "INVIA">
+			<input type = "text" id = "owner" name = "owner" required pattern = "^(\D{1,})$"
+			onblur = "validateFormElem(this, document.getElementById('errorOwner'), ownerErrorMessage)">
+			<span id = "errorOwner"></span><br>
+			<br>
+			<input type = "submit" value = "INVIA" class = "db-switch" onclick = "return validate()">
 		</form> 
-	
+		</div>
+	<%@include file="../fragments/footer.html"%>
 </body>
 </html>

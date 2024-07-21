@@ -35,29 +35,42 @@
 					<%for(CreditCardBean card : cards){
 						String num = card.getNumeroCarta();
 						String scadenza = card.getScadenza();%>
-						<input type = "radio" class = "center" value = "<%=num%>" name = "card" required>&ensp;Numero Carta: <%=num%> &emsp; Scadenza: <%=scadenza%><br>
+						<div class = "card">
+						<input type = "radio" class = "" value = "<%=num%>" name = "card" required>&ensp;Numero Carta: <%=num%> &emsp; Scadenza: <%=scadenza%><br>
+			  	    	</div>
 			  	    <%}%>
-			  		  <input type = "submit" value = "Completa l'ordine" class = "">
+			  	    <div class = "cart-checkout">
+			  		  <input type = "submit" value = "Completa l'ordine" class = "db-switch">
+			  		 </div>
 					  </form><br>
 			 <%}%>
 			
 				<h2 style = "text-align : center;">Riepilogo Ordine</h2><br>
 				<table class = "center">
-				<%for(OrderItem item : list){
+				<%
+				double total = 0;
+				for(OrderItem item : list){
 					int id = item.getId();
-					String op = item.getOperazione();%>
+					double costo = item.getCosto();
+					String op = item.getOperazione();
+					total = total + costo;%>
 				    <tr>
 						<td style="border-bottom: 2px solid black; border-top: 2px solid black;">
 							<h5>Nome: </h5> <%=item.getNomeOpera()%> <br>
 							<h5>Tipologia: </h5> <%=item.getTipoOpera()%><br>
 							<h5>Operazione: </h5> <%=op%><br>
-							<h5>Prezzo: </h5> <%=item.getCosto()%> &euro; <br>
+							<h5>Prezzo: </h5> <%=costo%> &euro; <br>
 						</td>
 					</tr>
-				<%}
-		  }%>
+				<%}%>
+				    <tr>
+						<td style="border-bottom: 2px solid black; border-top: 2px solid black;">
+							<h5>Importo Totale =</h5><%=total%> &euro;<br>
+						</td>
+					</tr>				
+		  <%}%>
 		</table>
-
+	<%@include file="../fragments/footer.html"%>
 
 </body>
 </html>

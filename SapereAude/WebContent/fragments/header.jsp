@@ -3,7 +3,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" href = "../css/style.css" type = "text/css">
 <meta charset="ISO-8859-1">
 </head>
 <body>
@@ -13,15 +12,21 @@
 	Boolean logged = (Boolean) s.getAttribute("logged");
 	Boolean admin = (Boolean) s.getAttribute("isAdmin");
 	if(logged == null){%>
+	<link rel="stylesheet" href = "./css/style.css" type = "text/css">
 	<div id = "header">
+	   	<img class = "logo" src="./images/logo.jpeg">
 		<input class = "btn" type = "button" value= "ACCEDI" onclick = "loginFunction()">
- 		<input style = "margin-right:30px" class = "btn" type = "button" value= "REGISTRATI" onclick = "registrationFunction()">
+ 		<input class = "btn" type = "button" value= "REGISTRATI" onclick = "registrationFunction()">
 
  	</div>
   <%}
   else{%>
+  	<link rel="stylesheet" href = "../css/style.css" type = "text/css">
 	<div id = "header">
-		<a href="Cart.jsp">
+		<a href="#" onclick = "goHome()">
+	   		<img class = "logo" src="../images/logo.jpeg">
+	    </a>
+		<a href="#" onclick = "cartFunction()">
  			<img class = "cart-btn" src="../images/cart.png">
 		</a>
 		<input class = "btn" type = "button" value= "ACCOUNT" onclick = "accountFunction()">
@@ -30,6 +35,7 @@
 		<% }%>
  	</div>
  	<% }%>
+ 	
  	<script>
  		function registrationFunction(){
  			window.location.assign("registrazione.jsp");
@@ -46,9 +52,22 @@
  			window.location.assign(currentLocation.substring(0, 33) + "common/accountHome.jsp");
  			return false;
  		}
+ 		
+ 		function goHome(){
+ 			var currentLocation = window.location.href;
+ 			window.location.assign(currentLocation.substring(0, 33) + "common/Home.jsp");
+ 			return false;
+ 		}
+ 		
  		function adminFunction(){
  			var currentLocation = window.location.href;
  			window.location.assign(currentLocation.substring(0, 33) + "admin/adminHome.jsp");
+ 			return false;
+ 		}
+ 		
+ 		function cartFunction(){
+ 			var currentLocation = window.location.href;
+ 			window.location.assign(currentLocation.substring(0, 33) + "common/Cart.jsp");
  			return false;
  		}
  	</script>

@@ -1,6 +1,8 @@
 function showBook() {
-	var isbn = sessionStorage.getItem("ISBN");
+	const urlParams = new URLSearchParams(window.location.search);
+	var isbn = urlParams.get('isbn');
 	var params = "ISBN="+isbn;
+	console.log(isbn);
     var url = '../DigitalBookServlet';
     loadAjaxDoc(url, params, "GET", printDigitalBook);
 }
@@ -87,19 +89,17 @@ function printDigitalBook(request){
 		head.innerHTML = "LIBRO" + "<br>" + "<br>";
 		
 		var text = document.createElement("span");
-		text.className = "center";
+		text.classList.add("txt");
 		
-		var name = sessionStorage.getItem("Name");
-		var category = sessionStorage.getItem("Category");
-		var value = sessionStorage.getItem("Value");
-		var author = sessionStorage.getItem("Author");
-		var src = sessionStorage.getItem("Foto");
+		var isbn = response.ISBN;
+		var name = response.Nome;
+		var category = response.Categoria;
+		var author = response.Autore;
+		var ph = response.Foto;
 		var costoAcquisto = response.CostoAcquisto;
 		var costoNoleggio = response.CostoNoleggio;
-		sessionStorage.setItem("CostoAcquisto", costoAcquisto);
-		sessionStorage.setItem("CostoNoleggio", costoNoleggio);
-		sessionStorage.setItem("Type", "libro");
 
+		var src = "data:image/png;base64," + ph;
 		var photo = document.createElement("img");
 		photo.classList.add("image");
 		photo.src = src;
@@ -108,8 +108,6 @@ function printDigitalBook(request){
 		text.innerHTML += "<br>Nome: " + name + "<br>";
 		
 		text.innerHTML += "Categoria: " + category + "<br>";
-		
-		text.innerHTML += "Valutazione: " + value + "<br>";
 		
 		text.innerHTML += "Autore: " + author + "<br>";
 		
@@ -121,12 +119,20 @@ function printDigitalBook(request){
 		
 		text.innerHTML += "Prezzo noleggio: " + costoNoleggio + "&#8364 <br>";
 
+		var BBparams = "ISBN="+isbn+"&name="+name+"&type=libro&operation=acquisto&price="+costoAcquisto;
+		var acquisto = document.getElementById("buy");
+		acquisto.onclick = function addToCart(){var url = '../AddToCart'; loadAjaxDoc(url, BBparams, "POST", msg);}
+
+		var BRparams = "ISBN="+isbn+"&name="+name+"&type=libro&operation=noleggio&price="+costoNoleggio;
+		var noleggio = document.getElementById("rent");
+		noleggio.onclick = function addToCart(){var url = '../AddToCart'; loadAjaxDoc(url, BRparams, "POST", msg);}
+
 		root.append(text);
 }
 
 function showAudioBook() {
-	var isbn = sessionStorage.getItem("ISBN");
-	
+	const urlParams = new URLSearchParams(window.location.search);
+	var isbn = urlParams.get('isbn');
 	var params = "ISBN="+isbn;
     var url = '../AudioBookServlet';
     loadAjaxDoc(url, params, "GET", printAudioBook);
@@ -144,18 +150,19 @@ function printAudioBook(request){
 		head.innerHTML = "AUDIOLIBRO" + "<br>" + "<br>";
 		
 		var text = document.createElement("span");
+		text.classList.add("txt");
 		
-		var name = sessionStorage.getItem("Name");
-		var category = sessionStorage.getItem("Category");
-		var value = sessionStorage.getItem("Value");
-		var author = sessionStorage.getItem("Author");
-		var src = sessionStorage.getItem("Foto");
+		var isbn = response.ISBN;
+		var name = response.Nome;
+		var category = response.Categoria;
+		var author = response.Autore;
+		var ph = response.Foto;
 		var costoAcquisto = response.CostoAcquisto;
 		var costoNoleggio = response.CostoNoleggio;
 		sessionStorage.setItem("CostoAcquisto", costoAcquisto);
 		sessionStorage.setItem("CostoNoleggio", costoNoleggio);
 		sessionStorage.setItem("Type", "audiolibro");
-
+		var src = "data:image/png;base64," + ph;
 		var photo = document.createElement("img");
 		photo.classList.add("image");
 		photo.src = src;
@@ -164,8 +171,6 @@ function printAudioBook(request){
 		text.innerHTML += "<br>Nome: " + name + "<br>";
 
 		text.innerHTML += "Categoria: " + category + "<br>";
-
-		text.innerHTML += "Valutazione: " + value + "<br>";
 
 		text.innerHTML += "Autore: " + author + "<br>";
 		
@@ -177,27 +182,18 @@ function printAudioBook(request){
 		
 		text.innerHTML += "Prezzo noleggio: " + costoNoleggio + "&#8364 <br>";
 		
-		root.append(text);		
+
+		var BAparams = "ISBN="+isbn+"&name="+name+"&type=audiolibro&operation=acquisto&price="+costoAcquisto;
+		var acquisto = document.getElementById("buy");
+		acquisto.onclick = function addToCart(){var url = '../AddToCart'; loadAjaxDoc(url, BAparams, "POST", msg);}
+
+		var RAparams = "ISBN="+isbn+"&name="+name+"&type=audiolibro&operation=noleggio&price="+costoNoleggio;
+		var noleggio = document.getElementById("rent");
+		noleggio.onclick = function addToCart(){var url = '../AddToCart'; loadAjaxDoc(url, RAparams, "POST", msg);}
+
+		root.append(text);
 }
 
-function addToCart(x) {
-	var isbn = sessionStorage.getItem("ISBN");
-	var name = sessionStorage.getItem("Name");
-	var type = sessionStorage.getItem("Type");
-	var op = x;
-	var rPrice = sessionStorage.getItem("CostoNoleggio");
-	var pPrice = sessionStorage.getItem("CostoAcquisto");
-	
-	if(!op.localeCompare("noleggio")){
-		var price = rPrice;
-	}
-	else if(!op.localeCompare("acquisto"))
-		var price = pPrice;
-			
-	var params = "ISBN="+isbn+"&name="+name+"&type="+type+"&operation="+op+"&price="+price;
-    var url = '../AddToCart';
-    loadAjaxDoc(url, params, "POST", msg);
-}
 
 function msg(){
 	var my_popup = document.getElementById("my-popup");

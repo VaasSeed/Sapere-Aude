@@ -11,9 +11,13 @@ public interface BuyDigitalBookDaoInterface {
 	
 	public ArrayList<BuyDigitalBookBean> doRetrieveAll(int order, String sort) throws SQLException;
 	
+	public ArrayList<BuyDigitalBookBean> doRetrieveAllAdmin(String isbn, int order, String sort) throws SQLException;
+	
 	public void doDelete(int id) throws SQLException;
 	
 	public Boolean alreadySaved(String ISBN, int order, String type) throws SQLException;
 	
 	public void updateDate(int id) throws SQLException;
+	
+	public void updateAdmin(int id, String name, double cost) throws SQLException;
 }

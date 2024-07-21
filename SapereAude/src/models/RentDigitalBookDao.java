@@ -213,6 +213,77 @@ public class RentDigitalBookDao implements RentDigitalBookDaoInterface {
 		 }
 		return rentDigitalBooks;
 	}
+
+	@Override
+	public synchronized ArrayList<RentDigitalBookBean> doRetrieveAllAdmin(String isbn, int order, String sort) throws SQLException {
+		
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		ArrayList<RentDigitalBookBean> rentDigitalBooks = new ArrayList<RentDigitalBookBean>();
+
+		String selectSQL = "SELECT * FROM " + RentDigitalBookDao.TABLE_NAME
+						   + " WHERE ordine = ? AND ISBNOpera = ? ";
+
+		if (sort != null && !sort.equals("")) {
+			selectSQL += " ORDER BY " + sort;
+		}
+
+		try {
+			connection = ds.getConnection();
+			preparedStatement = connection.prepareStatement(selectSQL);
+			preparedStatement.setInt(1, order);
+			preparedStatement.setString(2, isbn);
+
+			ResultSet rs = preparedStatement.executeQuery();
+			
+			DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+			while (rs.next()) {
+				RentDigitalBookBean rentDigitalBook = new RentDigitalBookBean();
+				
+				rentDigitalBook.setIdNoleggio(rs.getInt("idNoleggio"));
+				
+				Calendar c = Calendar.getInstance();
+				c.setTime(rs.getDate("dataInizioNoleggio"));
+				
+				if(rs.getDate("dataInizioNoleggio") != null) {
+					String beginAsString = df.format(c.getTime());
+					rentDigitalBook.setDataInizioNoleggio(beginAsString);
+				}
+				
+				Calendar c2 = Calendar.getInstance();
+				c2.setTime(rs.getDate("dataFineNoleggio"));
+				
+				if(rs.getDate("dataFineNoleggio") != null) {
+					String endAsString = df.format(c2.getTime());
+					rentDigitalBook.setDataFineNoleggio(endAsString);
+				}
+				
+				rentDigitalBook.setTipoOpera(rs.getString("tipoOpera"));
+				rentDigitalBook.setISBNOpera(rs.getString("ISBNOpera"));
+				rentDigitalBook.setNomeOpera(rs.getString("nomeOpera"));
+				rentDigitalBook.setOrdine(rs.getInt("ordine"));
+				rentDigitalBook.setCosto(rs.getDouble("costo"));
+				rentDigitalBooks.add(rentDigitalBook);
+			}
+		}
+		catch (Exception ex) 
+		{
+			System.out.println("SELECT ALL operation failed: An Exception has occurred! " + ex); 
+		}
+		 finally {
+				try {
+					if (preparedStatement != null)
+						preparedStatement.close();
+				} 
+				finally {
+					if (connection != null)
+						connection.close();
+				}
+		 }
+		return rentDigitalBooks;
+	}
+
 	
 	@Override
 	public synchronized void doDelete(int id) throws SQLException {
@@ -328,4 +399,42 @@ public class RentDigitalBookDao implements RentDigitalBookDaoInterface {
 		 }
 		
 	}
+	
+	@Override
+	public synchronized void updateAdmin(int id, String name, double cost) throws SQLException {
+
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		String updateSQL = "UPDATE " + RentDigitalBookDao.TABLE_NAME 
+						+ " SET nomeOpera = ?, costo = ? WHERE idNoleggio = ?";
+		
+		try {
+			connection = ds.getConnection();
+			connection.setAutoCommit(false);
+			preparedStatement = connection.prepareStatement(updateSQL);
+			preparedStatement.setString(1, name);
+			preparedStatement.setDouble(2, cost);
+			preparedStatement.setInt(3, id);
+			
+			preparedStatement.executeUpdate();
+			connection.commit();
+		}
+		catch (Exception ex) 
+		{
+			System.out.println("UPDATE ADMIN failed: An Exception has occurred! " + ex); 
+		}
+		 finally {
+				try {
+					if (preparedStatement != null)
+							preparedStatement.close();
+				} 
+				finally {
+					if (connection != null)
+							connection.close();
+				}
+		 }
+		
+	}
+	
 }

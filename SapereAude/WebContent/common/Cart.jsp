@@ -44,7 +44,9 @@
 				<%
 			}%>
 			</table>
-			<input type = "button" value = "Checkout" class = "" onclick = "orderSummary()">
+			<div class = "cart-checkout">
+				<input type = "button" value = "Checkout" class = "db-switch" onclick = "orderSummary()">
+			</div>
 		<%}%>
 		
 		<script>
@@ -54,6 +56,6 @@
 	 			return false;
 			}
 		</script>
-	
+	<%@include file="../fragments/footer.html"%>
 </body>
 </html>

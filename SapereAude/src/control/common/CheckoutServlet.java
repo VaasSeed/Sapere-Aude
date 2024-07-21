@@ -136,7 +136,7 @@ public class CheckoutServlet extends HttpServlet {
 			}
 			orderDao.doUpdateCost(idOrder, total);
 			request.getSession().removeAttribute("Cart");
-			out.println("<center><h1>ORDINE COMPLETATO</h1></center>");
+			response.sendRedirect(request.getContextPath() + "/common/accountHome.jsp");
 			
 		} catch (Exception ex) {
 			System.out.println("CHECKOUT operation failed: An Exception has occurred! " + ex);

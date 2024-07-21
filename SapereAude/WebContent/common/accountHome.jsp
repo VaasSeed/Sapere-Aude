@@ -7,13 +7,13 @@
 <link rel="stylesheet" type="text/css" href="../css/style.css">
 <title>ADMIN HOME</title>
 </head>
-<body>
+<body onload = "show('ShowAccountOrders.jsp')">
 	<div>
   		<%@include file="../fragments/header.jsp"%>
   	</div>
 	  	<section id="filters">
 	  		<ul class = "l">
-				<li class = "navelement">Il mio profilo</li>
+				<li class = "navelement"><input type = "button" onclick = "show('ShowAccountOrders.jsp')" class = "filter" value= "I miei ordini"></li>
 				<li class = "navelement"><input type = "button" onclick = "show('creditCard.jsp')" class = "filter" value= "Le mie carte"></li>
 				<li class = "navelement"><input type = "button" onclick = "logoutFunction()" class = "filter" value= "Logout"></li>
 			</ul>

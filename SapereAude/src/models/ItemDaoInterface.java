@@ -10,4 +10,8 @@ public interface ItemDaoInterface {
 	public ItemBean doRetrieve(String ISBN) throws SQLException;
 	
 	public ArrayList<ItemBean> doRetrieveAll(String order) throws SQLException;
+	
+	public void doUpdate(String isbn, ItemBean updated) throws SQLException;
+	
+	public void doDelete(String isbn) throws SQLException;
 }

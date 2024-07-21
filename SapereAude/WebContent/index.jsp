@@ -12,7 +12,9 @@
 		<%@include file="./fragments/header.jsp"%>
 	</div>
 	<br>
-	<h1></h1>
-
+	<img class = "indexImg" src="images/logo.jpeg">
+		<div>
+		<%@include file="./fragments/footer.html"%>
+	</div>
 </body>
 </html>

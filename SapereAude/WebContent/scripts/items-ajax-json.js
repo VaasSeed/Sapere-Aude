@@ -99,7 +99,6 @@ function printUserItems(request){
 		
 		var photo = document.createElement("img");
 		photo.classList.add("image");
-		div.classList.add("bookImage");
 		var src = "data:image/png;base64," + ph;
 		photo.src = src;
 		
@@ -122,10 +121,12 @@ function printUserItems(request){
 		
 		if(tipo == "libro"){
 			button.setAttribute("href", "ReadBook.jsp?isbn="+isbn);
+			button.classList.add("a-button");
 			button.innerHTML = "LEGGI";
 		}
 		else{
 			button.setAttribute("href", "ListenBook.jsp?isbn="+isbn);
+			button.classList.add("a-button");
 			button.innerHTML = "ASCOLTA";
 		}
 	
@@ -148,15 +149,9 @@ function printItems(request){
 		var isbn = response[i].ISBN;
 		var name = response[i].Nome;
 		var category = response[i].Categoria
-		var value = response[i].MediaVoti
 		var author = response[i].Autore
 		var ph = response[i].Foto;
-		
-		sessionStorage.setItem("ISBN", isbn);
-		sessionStorage.setItem("Name", name);
-		sessionStorage.setItem("Category", category);
-		sessionStorage.setItem("Value", value);
-		sessionStorage.setItem("Author", author);
+	
 		
 		var div = document.createElement("button");
 		div.classList.add("list");
@@ -164,11 +159,9 @@ function printItems(request){
 		
 		var photo = document.createElement("img");
 		photo.classList.add("image");
-		div.classList.add("bookImage");
 		var src = "data:image/png;base64," + ph;
 		photo.src = src;
 		
-		sessionStorage.setItem("Foto", src);
 		
 		div.appendChild(photo);
 		
@@ -176,16 +169,14 @@ function printItems(request){
 		
 		div.innerHTML += category + "<br>";
 		
-		div.innerHTML += value + "<br>";
-		
 		div.innerHTML += author+ "<br>";
 		
 		var button = document.createElement('a');
-		button.setAttribute("href", "DigitalBook.jsp");
+		button.classList.add("a-button");
+		button.setAttribute("href", "DigitalBook.jsp?isbn="+isbn);
 		button.innerHTML = "APRI";
-	
-		div.append(button);	
-		root.append(div);
 		
+		root.append(div);
+		div.append(button);	
 	}
 }

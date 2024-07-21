@@ -125,15 +125,24 @@ public class CreditCardDao implements CreditCardDaoInterface {
 		
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
-
+		PreparedStatement c1 = null;
+		PreparedStatement c2 = null;
+		
+		
+		String check1 = " set foreign_key_checks = 0 ";
 		String deleteSQL = " DELETE FROM " + CreditCardDao.TABLE_NAME + " WHERE numeroCarta = ? ";
+		String check2 = " set foreign_key_checks = 1 ";
 		
 		try {
 			connection = ds.getConnection();
+			c1 = connection.prepareStatement(check1);
 			preparedStatement = connection.prepareStatement(deleteSQL);
 			preparedStatement.setString(1, cardNumber);
+			c2 = connection.prepareStatement(check2);
 
+			c1.executeUpdate();
 			preparedStatement.executeUpdate();
+			c2.executeUpdate();
 		}
 		catch (Exception ex) 
 		{

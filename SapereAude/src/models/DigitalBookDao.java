@@ -1,5 +1,6 @@
 package models;
 
+import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -174,4 +175,88 @@ public class DigitalBookDao implements DigitalBookDaoInterface {
 		 }
 		return digitalBooks;
 	}
+	
+	
+	@Override
+	public synchronized void doUpdate(String isbn, DigitalBookBean updated) throws SQLException {
+	
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		String updateSQL = "UPDATE " + DigitalBookDao.TABLE_NAME 
+				         + " SET bookFile = ?, numeroPagine = ?, linguaTesto = ?, costoAcquisto = ?, costoNoleggio = ?"
+				         + " WHERE ISBNOpera = ?";
+		
+		InputStream bookFile = updated.getBookFile();
+		int numeroPagine = updated.getNumPagine();
+		String lingua = updated.getLingua();
+		double aPrice = updated.getCostoAcquisto();
+		double nPrice = updated.getCostoNoleggio();
+		
+		try {
+			connection = ds.getConnection();
+			connection.setAutoCommit(false);
+			preparedStatement = connection.prepareStatement(updateSQL);
+			
+			preparedStatement.setBlob(1, bookFile);
+			preparedStatement.setInt(2, numeroPagine);
+			preparedStatement.setString(3, lingua);
+			preparedStatement.setDouble(4, aPrice);
+			preparedStatement.setDouble(5, nPrice);
+			preparedStatement.setString(6, isbn);
+			preparedStatement.executeUpdate();
+
+			connection.commit();
+		}
+		catch (SQLException ex) 
+		{
+			System.out.println("UPDATE operation failed: An Exception has occurred! " + ex); 
+		}
+		finally {
+			try {
+				if (preparedStatement != null)
+						preparedStatement.close();
+				} 
+		finally {
+			if (connection != null)
+				connection.close();
+		}
+		}
+	}
+	
+	@Override
+	public synchronized void doDelete(String isbn) throws SQLException {
+		
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		String insertSQL = "DELETE FROM " + DigitalBookDao.TABLE_NAME
+						+ " WHERE ISBNOpera = ? ";
+		
+		try {
+			connection = ds.getConnection();
+			connection.setAutoCommit(false);
+			preparedStatement = connection.prepareStatement(insertSQL);
+			preparedStatement.setString(1, isbn);
+		
+			preparedStatement.executeUpdate();
+
+			connection.commit();
+		}
+		catch (SQLException ex) 
+		{
+			System.out.println("DELETE operation failed: An Exception has occurred! " + ex); 
+		}
+		 finally {
+				try {
+					if (preparedStatement != null)
+						preparedStatement.close();
+				} 
+				finally {
+					if (connection != null)
+						connection.close();
+				}
+		 }
+	}
+	
 }

@@ -246,6 +246,64 @@ public class OrderDao implements OrderDaoInterface {
 		return orders;
 	}
 	
+	
+	@Override
+	public synchronized ArrayList<OrderBean> doRetrieveAllAdmin(int status, String organize) throws SQLException {
+	
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+
+		ArrayList<OrderBean> orders = new ArrayList<OrderBean>();
+
+		String selectSQL = "select * from " + OrderDao.TABLE_NAME
+						 + " where stato = ?";
+
+		if (organize != null && !organize.equals("")) {
+			selectSQL += " ORDER BY " + organize + " DESC";
+		}
+
+		try {
+			connection = ds.getConnection();
+			preparedStatement = connection.prepareStatement(selectSQL);
+			preparedStatement.setInt(1, status);
+
+			ResultSet rs = preparedStatement.executeQuery();
+			DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+			
+			while (rs.next()) {
+				OrderBean order = new OrderBean();
+				
+				Date date = rs.getDate("dataOrdine");
+				if(date != null) {
+					String dateAsString = df.format(date);
+					order.setDataOrdine(dateAsString);
+				}
+				
+				order.setIdOrdine(rs.getInt("idOrdine"));
+				order.setImportoTotale(rs.getDouble("importoTotale"));
+				order.setStato(rs.getInt("stato"));
+				order.setUtente(rs.getString("accountref"));
+				order.setMetodoPagamento(rs.getString("creditCard"));
+				orders.add(order);
+			}
+		}
+		catch (Exception ex) 
+		{
+			System.out.println("SELECT ALL operation failed: An Exception has occurred! " + ex); 
+		}
+		 finally {
+				try {
+					if (preparedStatement != null)
+						preparedStatement.close();
+				} 
+				finally {
+					if (connection != null)
+						connection.close();
+				}
+		 }
+		return orders;
+	}
+	
 
 	public synchronized void doUpdateCost(int id, double cost) throws SQLException {
 		
