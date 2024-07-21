@@ -32,9 +32,11 @@
 		String file = "data:application/mp3;base64," + base64AudioFile;
 
 	%>
-	<audio controls>
-        <source src ='<%=file%>' type="audio/mpeg">
-    </audio>
+	<div class = "audio">
+		<audio controls class = "player">
+	        <source src ='<%=file%>' type="audio/mpeg">
+	    </audio>
+    </div>
 
 </body>
 </html>

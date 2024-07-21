@@ -44,12 +44,16 @@ public class RemoveItem extends HttpServlet {
 		
 		HttpSession s = request.getSession();
 		ArrayList<OrderItem> list = (ArrayList<OrderItem>) s.getAttribute("Cart");
-		for(OrderItem elem : list) {
-			cartISBN = elem.getISBNOpera();
-			if(cartISBN.equals(isbn))
-				list.remove(elem);
+		if(list != null) {
+			if(list.size() > 0) {
+				for(OrderItem elem : list) {
+					cartISBN = elem.getISBNOpera();
+					if(cartISBN.equals(isbn))
+						list.remove(elem);
+				}
+				s.setAttribute("Cart", list);
+			}
 		}
-		s.setAttribute("Cart", list);
 		
 		
 		OrderDao orderDao = new OrderDao();
